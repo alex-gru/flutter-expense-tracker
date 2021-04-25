@@ -37,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _val1 = 0;
   int _val2 = 0;
+  List<Expense> expenses = [];
 
   void _incrementCounter() {
     setState(() {
@@ -48,10 +49,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    Query query = FirebaseFirestore.instance.collection('liste');
+    Query query = FirebaseFirestore.instance.collection('expenses');
     query.get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
-        log('{$document');
+        var expense = Expense(
+          document.get('origin'),
+          document.get('value'),
+          document.get('when'),
+        );
+        expenses.add(expense);
+        log(expense.toString());
       });
     });
 
@@ -108,5 +115,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+}
+
+class Expense {
+  String origin;
+  double value;
+  Timestamp when;
+
+  Expense(String origin, double value, Timestamp when) {
+    this.origin = origin;
+    this.value = value;
+    this.when = when;
+  }
+
+  @override
+  String toString() {
+    return 'Expense{origin: $origin, value: $value, when: $when}';
   }
 }
