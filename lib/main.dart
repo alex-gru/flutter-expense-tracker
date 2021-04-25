@@ -63,44 +63,46 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      '$_val1',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    Text(
-                      "her",
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      '$_val2',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    Text(
-                      "him",
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                  ],
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '$_val1',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      Text(
+                        "her",
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '$_val2',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      Text(
+                        "him",
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             Divider(),
-            Row(
-              children: [_buildListView()],
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            )
+            Container(
+                height: 400,
+                child: _buildListView()),
           ],
         ),
       ),
@@ -134,25 +136,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   double calcSum(origin) => _expenses.where((element) => element.origin == origin).map((element) => element.value).reduce((value, element) => value + element);
 
-  Column _buildListView() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: _expenses
-            .map((expense) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      expense.origin,
-                    ),
-                    Text(
-                      expense.value.toString(),
-                    ),
-                    Text(
-                      expense.when.toDate().toString(),
-                    ),
-                  ],
-                ))
-            .toList());
+  Widget _buildListView() {
+    return ListView.builder(
+        itemCount: _expenses.length,
+        padding: EdgeInsets.all(16.0),
+        itemBuilder: (context, i) {
+      return ListTile(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(_expenses[i].origin),
+              Text(_expenses[i].value.toString()),
+              Text(_expenses[i].when.toDate().toString()),
+            ],
+          ),
+          trailing: Icon(Icons.remove_circle_outline_outlined),
+      );
+    });
   }
 }
 
