@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -47,24 +48,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    queryExpenses();
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    Query query = FirebaseFirestore.instance.collection('expenses');
-    query.get().then((querySnapshot) async {
-      querySnapshot.docs.forEach((document) {
-        var expense = Expense(
-          document.get('origin'),
-          document.get('value'),
-          document.get('when'),
-        );
-        expenses.add(expense);
-        log(expense.toString());
-      });
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(icon: Icon(Icons.refresh), onPressed: queryExpenses)
+        ],
       ),
       body: Center(
         child: Column(
@@ -97,15 +92,19 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  "Franzi",
+                  "her",
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 Text(
-                  "Alex",
+                  "him",
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
               ],
             ),
+            Row(
+              children: [_buildListView()],
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            )
           ],
         ),
       ),
@@ -115,6 +114,45 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void queryExpenses() {
+    expenses.clear();
+    Query query = FirebaseFirestore.instance.collection('expenses');
+    query.orderBy('when', descending: true).get().then((querySnapshot) async {
+      querySnapshot.docs.forEach((document) {
+        var expense = Expense(
+          document.get('origin'),
+          document.get('value'),
+          document.get('when'),
+        );
+        setState(() {
+          expenses.add(expense);
+          log(expense.toString());
+        });
+      });
+    });
+  }
+
+  Column _buildListView() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: expenses
+            .map((expense) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      expense.origin,
+                    ),
+                    Text(
+                      expense.value.toString(),
+                    ),
+                    Text(
+                      expense.when.toDate().toString(),
+                    ),
+                  ],
+                ))
+            .toList());
   }
 }
 
