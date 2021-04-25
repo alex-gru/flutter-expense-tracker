@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = false;
   runApp(MyApp());
 }
 
@@ -36,9 +36,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _val1 = 0;
-  int _val2 = 0;
-  List<Expense> expenses = [];
+  double _val1 = 0;
+  double _val2 = 0;
+  List<Expense> _expenses = [];
 
   void _incrementCounter() {
     setState(() {
@@ -75,6 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       '$_val1',
                       style: Theme.of(context).textTheme.headline2,
                     ),
+                    Text(
+                      "her",
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
                   ],
                 ),
                 Column(
@@ -84,23 +88,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       '$_val2',
                       style: Theme.of(context).textTheme.headline2,
                     ),
+                    Text(
+                      "him",
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
                   ],
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  "her",
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-                Text(
-                  "him",
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-              ],
-            ),
+            Divider(),
             Row(
               children: [_buildListView()],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void queryExpenses() {
-    expenses.clear();
+    _expenses.clear();
     Query query = FirebaseFirestore.instance.collection('expenses');
     query.orderBy('when', descending: true).get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
@@ -127,17 +123,21 @@ class _MyHomePageState extends State<MyHomePage> {
           document.get('when'),
         );
         setState(() {
-          expenses.add(expense);
+          _expenses.add(expense);
           log(expense.toString());
         });
       });
+      _val1 = calcSum('her');
+      _val2 = calcSum('him');
     });
   }
+
+  double calcSum(origin) => _expenses.where((element) => element.origin == origin).map((element) => element.value).reduce((value, element) => value + element);
 
   Column _buildListView() {
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: expenses
+        children: _expenses
             .map((expense) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
