@@ -40,6 +40,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final formatter = NumberFormat("#,###.0#");
   double _val1 = 0;
   double _val2 = 0;
+  int _share1 = 2;
+  int _share2 = 2;
+
   List<Expense> _expenses = [];
 
   void _incrementCounter() {
@@ -101,7 +104,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            Divider(),
+            Container(
+                height: 20,
+                child: Row(
+                  children: [
+                  Expanded(child: Container(color: Colors.purple,),flex: _share1,),
+                  Expanded(child: Container(color: Colors.lightGreen,),flex: _share2,),
+                ],
+                )
+              ),
             Container(
                 height: 400,
                 child: _buildListView()),
@@ -131,8 +142,16 @@ class _MyHomePageState extends State<MyHomePage> {
           log(expense.toString());
         });
       });
+      // total amounts, e.g. € 38.58, € 45.31
       _val1 = calcSum('her');
       _val2 = calcSum('him');
+      // share of person1 on total amount, e.g. 0.4599
+      final _share = _val1 / (_val1 + _val2);
+      // compute "flex" values, e.g. 460, 540
+      // will be used for relative sizing of the horizontal bar
+      _share1 = (_share * 1000).round();
+      _share2 = ((1 -_share) * 1000).round();
+      log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
     });
   }
 
