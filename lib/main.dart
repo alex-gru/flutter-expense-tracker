@@ -1,11 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_expense_tracker/modules/dialogs/add.dart';
 import 'package:flutter_expense_tracker/modules/list_view.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'modules/dialog-result.dart';
 import 'modules/expense.dart';
 import 'modules/utils.dart';
 
@@ -157,8 +159,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) => AddDialog())
+              .then((value) {
+            if (value == RESULT.ADDED) {
+              queryExpenses();
+            }
+            return null;
+          });
+        },
+        tooltip: 'Add Expense',
         child: Icon(Icons.add),
       ),
     );

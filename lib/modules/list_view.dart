@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 
-import 'delete.dart';
+import 'dialogs/delete.dart';
+import 'dialog-result.dart';
 import 'expense.dart';
 
 class ExpenseListView extends StatefulWidget {
@@ -65,7 +66,7 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                             builder: (_) => DeleteDialog(
                                   expense: expenses[i],
                                 )).then((value) {
-                          if (value == RESULT.DELETE) {
+                          if (value == RESULT.DELETED) {
                             this.widget.callback();
                           }
                           return null;

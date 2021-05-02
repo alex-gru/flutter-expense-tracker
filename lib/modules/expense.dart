@@ -19,4 +19,8 @@ class Expense {
   String toString() {
     return 'Expense{id: $id, origin: $origin, value: $value, when: $when, text: $text}';
   }
+
+  static create(String origin, double amount, Timestamp timestamp, String text) {
+    return Expense('placeholderId', origin, amount, timestamp, text);
+  }
 }

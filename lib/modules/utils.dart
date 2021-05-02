@@ -10,7 +10,7 @@ MaterialColor getPersonColor(String person) {
 }
 
 String niceAmount(double amount) =>
-    amount == 0 ? '-' : '€ ${amountFormatter.format(amount)}';
+    amount == 0 ? '€ 0' : '€ ${amountFormatter.format(amount)}';
 
 String niceDate(Timestamp timestamp) {
   // https://stackoverflow.com/a/54391552/2472398

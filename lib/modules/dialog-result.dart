@@ -1,0 +1,1 @@
+enum RESULT { DELETED, ADDED, CANCEL }

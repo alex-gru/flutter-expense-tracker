@@ -3,10 +3,9 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'expense.dart';
-import 'utils.dart';
-
-enum RESULT { DELETE, CANCEL }
+import '../dialog-result.dart';
+import '../expense.dart';
+import '../utils.dart';
 
 class DeleteDialog extends StatefulWidget {
   final Expense expense;
@@ -51,7 +50,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context, RESULT.DELETE);
+            Navigator.pop(context, RESULT.DELETED);
             FirebaseFirestore.instance
                 .collection('expenses')
                 .doc(expense.id)
