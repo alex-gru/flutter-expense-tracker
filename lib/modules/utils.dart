@@ -1,28 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-final formatter = NumberFormat("#,###.0#");
+final amountFormatter = NumberFormat("#,###.0#");
+final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 
 MaterialColor getPersonColor(String person) {
   return person == 'person1' ? Colors.purple : Colors.lightGreen;
 }
 
 String niceAmount(double amount) =>
-    amount == 0 ? '-' : '€ ${formatter.format(amount)}';
+    amount == 0 ? '-' : '€ ${amountFormatter.format(amount)}';
 
-String niceDate(DateTime dateTime) {
+String niceDate(Timestamp timestamp) {
   // https://stackoverflow.com/a/54391552/2472398
-  final monthDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
+  final dateTime = timestamp.toDate();
+  final shortDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final yesterday = DateTime(now.year, now.month, now.day - 1);
 
-  if (monthDay == today)
+  if (shortDate == today)
     return "today";
-  else if (monthDay == yesterday)
+  else if (shortDate == yesterday)
     return "yesterday";
   else
-    return '${monthDay.month}/${monthDay.day}';
+    return '${shortDate.month}/${shortDate.day}';
+}
+
+String shortDate(Timestamp timestamp) {
+  final dateTime = timestamp.toDate();
+  return dateTimeFormatter.format(dateTime);
 }
 
 double calcSum(origin, expenses) => expenses.isEmpty

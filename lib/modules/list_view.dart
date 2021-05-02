@@ -36,7 +36,10 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                       flex: 3,
                     ),
                     Expanded(
-                        child: Text(niceDate(expenses[i].when.toDate())),
+                        child: Tooltip(
+                          child: Text(niceDate(expenses[i].when)),
+                          message: shortDate(expenses[i].when),
+                        ),
                         flex: 2),
                   ],
                 ),
@@ -45,25 +48,31 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                   child:
                       Text(expenses[i].text.isNotEmpty ? expenses[i].text : ''),
                 ),
-                leading: Icon(
-                  Icons.account_circle,
-                  color: getPersonColor(expenses[i].origin),
+                leading: Tooltip(
+                  child: Icon(
+                    Icons.account_circle,
+                    color: getPersonColor(expenses[i].origin),
+                  ),
+                  message: expenses[i].origin,
                 ),
-                trailing: IconButton(
-                    icon: new Icon(Icons.remove_circle_outline_outlined,
-                        color: Color(0xFF525252)),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => DeleteDialog(
-                                expense: expenses[i],
-                              )).then((value) {
-                        if (value == RESULT.DELETE) {
-                          this.widget.callback();
-                        }
-                        return null;
-                      });
-                    }),
+                trailing: Tooltip(
+                  child: IconButton(
+                      icon: new Icon(Icons.remove_circle_outline_outlined,
+                          color: Color(0xFF525252)),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => DeleteDialog(
+                                  expense: expenses[i],
+                                )).then((value) {
+                          if (value == RESULT.DELETE) {
+                            this.widget.callback();
+                          }
+                          return null;
+                        });
+                      }),
+                  message: 'Delete',
+                ),
               ),
               Divider()
             ],

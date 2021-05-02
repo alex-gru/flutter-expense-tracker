@@ -25,22 +25,28 @@ class _DeleteDialogState extends State<DeleteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Delete Entry?'),
-      content: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.account_circle,
-            color: getPersonColor(expense.origin),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-            child: Text(
-              '${niceAmount(expense.value)}',
+      title: const Text('Delete this Expense?'),
+      content: Padding(
+        padding: const EdgeInsets.fromLTRB(32, 0, 0, 0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Icon(
+                Icons.account_circle,
+                color: getPersonColor(expense.origin),
+              ),
+              flex: 1,
             ),
-          ),
-        ],
+            Expanded(
+              child: Text(
+                '${niceAmount(expense.value)}',
+              ),
+              flex: 4,
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

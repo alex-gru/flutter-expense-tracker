@@ -81,31 +81,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          niceAmount(_val1),
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                        Text(
-                          "person1",
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                      ],
+                    Tooltip(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            niceAmount(_val1),
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          Text(
+                            "person1",
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ],
+                      ),
+                      message: 'In total, person1 has spent ${niceAmount(_val1)}',
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          niceAmount(_val2),
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                        Text(
-                          "person2",
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                      ],
+                    Tooltip(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            niceAmount(_val2),
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          Text(
+                            "person2",
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ],
+                      ),
+                      message: 'In total, person2 has spent ${niceAmount(_val2)}',
                     ),
                   ],
                 ),
