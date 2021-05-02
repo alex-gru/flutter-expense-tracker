@@ -1,11 +1,13 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_expense_tracker/modules/list_view.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
+
+import 'modules/expense.dart';
+import 'modules/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +43,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final formatter = NumberFormat("#,###.0#");
   double _val1 = 0;
   double _val2 = 0;
   int _share1 = 2;
@@ -135,8 +136,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Container(
                     height: 400,
                     child: _expenses.isEmpty
-                        ? Center(child: Text('Pretty empty here. Use the button to add expenses.'))
-                        : _buildListView()),
+                        ? Center(
+                            child: Text(
+                                'Pretty empty here. Use the button to add expenses.',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w300)))
+                        : ExpenseListView(
+                            expenses: _expenses, callback: queryExpenses)),
                 flex: 30),
           ],
         ),
@@ -150,9 +157,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void queryExpenses() {
-    _expenses.clear();
+    log('call: queryExpenses');
     Query query = FirebaseFirestore.instance.collection('expenses');
     query.orderBy('when', descending: true).get().then((querySnapshot) async {
+      _expenses.clear();
       querySnapshot.docs.forEach((document) {
         var expense = Expense(
           document.id,
@@ -161,14 +169,11 @@ class _MyHomePageState extends State<MyHomePage> {
           document.get('when'),
           document.get('text'),
         );
-        setState(() {
-          _expenses.add(expense);
-          log(expense.toString());
-        });
+        setState(() => _expenses.add(expense));
       });
       // total amounts, e.g. € 38.58, € 45.31
-      _val1 = calcSum('person1');
-      _val2 = calcSum('person2');
+      _val1 = calcSum('person1', _expenses);
+      _val2 = calcSum('person2', _expenses);
       // share of person1 on total amount, e.g. 0.4599
       final _share = _expenses.isEmpty ? 0.5 : _val1 / (_val1 + _val2);
       // compute "flex" values, e.g. 460, 540
@@ -177,142 +182,5 @@ class _MyHomePageState extends State<MyHomePage> {
       _share2 = ((1 - _share) * 1000).round();
       log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
     });
-  }
-
-  double calcSum(origin) => _expenses.isEmpty
-      ? 0.0
-      : _expenses
-          .where((element) => element.origin == origin)
-          .map((element) => element.value)
-          .reduce((value, element) => value + element);
-
-  Widget _buildListView() {
-    return ListView.builder(
-        itemCount: _expenses.length,
-        padding: EdgeInsets.all(4.0),
-        itemBuilder: (context, i) {
-          return Column(
-            children: [
-              ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(niceAmount(_expenses[i].value)),
-                      flex: 3,
-                    ),
-                    Expanded(
-                        child: Text(niceDate(_expenses[i].when.toDate())),
-                        flex: 2),
-                  ],
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                  child: Text(
-                      _expenses[i].text.isNotEmpty ? _expenses[i].text : ''),
-                ),
-                leading: Icon(
-                  Icons.account_circle,
-                  color: getPersonColor(_expenses[i].origin),
-                ),
-                trailing: IconButton(
-                    icon: new Icon(Icons.remove_circle_outline_outlined,
-                        color: Color(0xFF525252)),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                title: const Text('Delete Entry?'),
-                                content: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.account_circle,
-                                      color:
-                                          getPersonColor(_expenses[i].origin),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                      child: Text(
-                                        '${niceAmount(_expenses[i].value)}',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        FirebaseFirestore.instance
-                                            .collection('expenses')
-                                            .doc(_expenses[i].id)
-                                            .delete()
-                                            .catchError((e) => log(
-                                                'Could not delete entry from Firebase collection. '
-                                                'id: ${_expenses[i].id}, origin: ${_expenses[i].origin}, amount: ${_expenses[i].value}'));
-                                      });
-                                    },
-                                    child: Text('Delete'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('Cancel'),
-                                  )
-                                ],
-                              ));
-                    }),
-              ),
-              Divider()
-            ],
-          );
-        });
-  }
-
-  MaterialColor getPersonColor(String person) {
-    return person == 'person1' ? Colors.purple : Colors.lightGreen;
-  }
-
-  String niceAmount(double amount) =>
-      amount == 0 ? '-' : '€ ${formatter.format(amount)}';
-
-  String niceDate(DateTime dateTime) {
-    // https://stackoverflow.com/a/54391552/2472398
-    final monthDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
-
-    if (monthDay == today)
-      return "today";
-    else if (monthDay == yesterday)
-      return "yesterday";
-    else
-      return '${monthDay.month}/${monthDay.day}';
-  }
-}
-
-class Expense {
-  String id;
-  String origin;
-  double value;
-  Timestamp when;
-  String text;
-
-  Expense(String id, String origin, double value, Timestamp when, String text) {
-    this.id = id;
-    this.origin = origin;
-    this.value = value;
-    this.when = when;
-    this.text = text;
-  }
-
-  @override
-  String toString() {
-    return 'Expense{id: $id, origin: $origin, value: $value, when: $when, text: $text}';
   }
 }
