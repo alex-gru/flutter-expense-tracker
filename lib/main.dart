@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
-                          "her",
+                          "person1",
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
-                          "him",
+                          "person2",
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
@@ -162,8 +162,8 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       });
       // total amounts, e.g. € 38.58, € 45.31
-      _val1 = calcSum('her');
-      _val2 = calcSum('him');
+      _val1 = calcSum('person1');
+      _val2 = calcSum('person2');
       // share of person1 on total amount, e.g. 0.4599
       final _share = _val1 / (_val1 + _val2);
       // compute "flex" values, e.g. 460, 540
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 leading: Icon(
                   Icons.account_circle,
-                  color: _expenses[i].origin == 'her'
+                  color: _expenses[i].origin == 'person1'
                       ? Colors.purple
                       : Colors.lightGreen,
                 ),
