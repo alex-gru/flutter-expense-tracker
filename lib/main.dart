@@ -154,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
           document.get('origin'),
           document.get('value'),
           document.get('when'),
+          document.get('text'),
         );
         setState(() {
           _expenses.add(expense);
@@ -193,6 +194,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     Expanded(child: Text(niceDate(_expenses[i].when.toDate())), flex: 2),
                   ],
                 ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                  child: Text(_expenses[i].text.isNotEmpty ? _expenses[i].text : ''),
+                ),
                 leading: Icon(
                   Icons.account_circle,
                   color: _expenses[i].origin == 'her'
@@ -230,15 +235,17 @@ class Expense {
   String origin;
   double value;
   Timestamp when;
+  String text;
 
-  Expense(String origin, double value, Timestamp when) {
+  Expense(String origin, double value, Timestamp when, String text) {
     this.origin = origin;
     this.value = value;
     this.when = when;
+    this.text = text;
   }
 
   @override
   String toString() {
-    return 'Expense{origin: $origin, value: $value, when: $when}';
+    return 'Expense{origin: $origin, value: $value, when: $when, text: $text}';
   }
 }
