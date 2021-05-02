@@ -151,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
     query.orderBy('when', descending: true).get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
         var expense = Expense(
+          document.id,
           document.get('origin'),
           document.get('value'),
           document.get('when'),
@@ -190,27 +191,76 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Expanded(child: Text(niceAmount(_expenses[i].value)), flex: 3,),
-                    Expanded(child: Text(niceDate(_expenses[i].when.toDate())), flex: 2),
+                    Expanded(
+                      child: Text(niceAmount(_expenses[i].value)),
+                      flex: 3,
+                    ),
+                    Expanded(
+                        child: Text(niceDate(_expenses[i].when.toDate())),
+                        flex: 2),
                   ],
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                  child: Text(_expenses[i].text.isNotEmpty ? _expenses[i].text : ''),
+                  child: Text(
+                      _expenses[i].text.isNotEmpty ? _expenses[i].text : ''),
                 ),
                 leading: Icon(
                   Icons.account_circle,
-                  color: _expenses[i].origin == 'person1'
-                      ? Colors.purple
-                      : Colors.lightGreen,
+                  color: getPersonColor(_expenses[i].origin),
                 ),
-                trailing: Icon(Icons.remove_circle_outline_outlined, color: Color(
-                    0xFF525252)),
+                trailing: IconButton(
+                    icon: new Icon(Icons.remove_circle_outline_outlined,
+                        color: Color(0xFF525252)),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                                title: const Text('Delete Entry?'),
+                                content: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.account_circle,
+                                      color: getPersonColor(_expenses[i].origin),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                      child: Text(
+                                        '${niceAmount(_expenses[i].value)}',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        log('now delete: ${_expenses[i]}');
+                                      },
+                                      child: Text('Delete'),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Cancel'),
+                                  )
+                                ],
+                              ));
+                    }),
               ),
               Divider()
             ],
           );
         });
+  }
+
+  MaterialColor getPersonColor(String person) {
+    return person == 'person1'
+                    ? Colors.purple
+                    : Colors.lightGreen;
   }
 
   String niceAmount(double amount) => '€ ${formatter.format(amount)}';
@@ -232,12 +282,14 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Expense {
+  String id;
   String origin;
   double value;
   Timestamp when;
   String text;
 
-  Expense(String origin, double value, Timestamp when, String text) {
+  Expense(String id, String origin, double value, Timestamp when, String text) {
+    this.id = id;
     this.origin = origin;
     this.value = value;
     this.when = when;
@@ -246,6 +298,6 @@ class Expense {
 
   @override
   String toString() {
-    return 'Expense{origin: $origin, value: $value, when: $when, text: $text}';
+    return 'Expense{id: $id, origin: $origin, value: $value, when: $when, text: $text}';
   }
 }
