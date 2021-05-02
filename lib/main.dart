@@ -95,7 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ],
                       ),
-                      message: 'In total, person1 has spent ${niceAmount(_val1)}',
+                      message:
+                          'In total, person1 has spent ${niceAmount(_val1)}',
                     ),
                     Tooltip(
                       child: Column(
@@ -111,7 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ],
                       ),
-                      message: 'In total, person2 has spent ${niceAmount(_val2)}',
+                      message:
+                          'In total, person2 has spent ${niceAmount(_val2)}',
                     ),
                   ],
                 ),
@@ -166,27 +168,28 @@ class _MyHomePageState extends State<MyHomePage> {
     log('call: queryExpenses');
     Query query = FirebaseFirestore.instance.collection('expenses');
     query.orderBy('when', descending: true).get().then((querySnapshot) async {
-      _expenses.clear();
-      querySnapshot.docs.forEach((document) {
-        var expense = Expense(
-          document.id,
-          document.get('origin'),
-          document.get('value'),
-          document.get('when'),
-          document.get('text'),
-        );
-        setState(() => _expenses.add(expense));
+      setState(() {
+        _expenses.clear();
+        querySnapshot.docs.forEach((document) {
+          _expenses.add(Expense(
+            document.id,
+            document.get('origin'),
+            document.get('value'),
+            document.get('when'),
+            document.get('text'),
+          ));
+        });
+        // total amounts, e.g. € 38.58, € 45.31
+        _val1 = calcSum('person1', _expenses);
+        _val2 = calcSum('person2', _expenses);
+        // share of person1 on total amount, e.g. 0.4599
+        final _share = _expenses.isEmpty ? 0.5 : _val1 / (_val1 + _val2);
+        // compute "flex" values, e.g. 460, 540
+        // will be used for relative sizing of the horizontal bar
+        _share1 = (_share * 1000).round();
+        _share2 = ((1 - _share) * 1000).round();
+        log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
       });
-      // total amounts, e.g. € 38.58, € 45.31
-      _val1 = calcSum('person1', _expenses);
-      _val2 = calcSum('person2', _expenses);
-      // share of person1 on total amount, e.g. 0.4599
-      final _share = _expenses.isEmpty ? 0.5 : _val1 / (_val1 + _val2);
-      // compute "flex" values, e.g. 460, 540
-      // will be used for relative sizing of the horizontal bar
-      _share1 = (_share * 1000).round();
-      _share2 = ((1 - _share) * 1000).round();
-      log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
     });
   }
 }
