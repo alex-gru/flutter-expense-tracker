@@ -223,10 +223,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     Icon(
                                       Icons.account_circle,
-                                      color: getPersonColor(_expenses[i].origin),
+                                      color:
+                                          getPersonColor(_expenses[i].origin),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 0, 0, 0),
                                       child: Text(
                                         '${niceAmount(_expenses[i].value)}',
                                       ),
@@ -235,17 +237,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 actions: [
                                   TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        log('now delete: ${_expenses[i]}');
-                                      },
-                                      child: Text('Delete'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      setState(() {
+                                        FirebaseFirestore.instance
+                                            .collection('expenses')
+                                            .doc(_expenses[i].id)
+                                            .delete()
+                                            .catchError((e) => log(
+                                                'Could not delete entry from Firebase collection. '
+                                                'id: ${_expenses[i].id}, origin: ${_expenses[i].origin}, amount: ${_expenses[i].value}'));
+                                      });
+                                    },
+                                    child: Text('Delete'),
                                   ),
                                   TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Cancel'),
                                   )
                                 ],
                               ));
@@ -258,9 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   MaterialColor getPersonColor(String person) {
-    return person == 'person1'
-                    ? Colors.purple
-                    : Colors.lightGreen;
+    return person == 'person1' ? Colors.purple : Colors.lightGreen;
   }
 
   String niceAmount(double amount) => '€ ${formatter.format(amount)}';
