@@ -70,52 +70,66 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        niceAmount(_val1),
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      Text(
-                        "her",
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        niceAmount(_val2),
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      Text(
-                        "him",
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-                height: 20,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                  Expanded(child: Container(color: Colors.purple,),flex: _share1,),
-                  Expanded(child: Container(color: Colors.lightGreen,),flex: _share2,),
-                ],
-                )
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          niceAmount(_val1),
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        Text(
+                          "her",
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          niceAmount(_val2),
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        Text(
+                          "him",
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            Container(
-                height: 400,
-                child: _buildListView()),
+              flex: 6,
+            ),
+            Expanded(
+                child: Container(
+                    height: 20,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            color: Colors.purple,
+                          ),
+                          flex: _share1,
+                        ),
+                        Expanded(
+                          child: Container(
+                            color: Colors.lightGreen,
+                          ),
+                          flex: _share2,
+                        ),
+                      ],
+                    )),
+                flex: 1),
+            Expanded(
+                child: Container(height: 400, child: _buildListView()),
+                flex: 30),
           ],
         ),
       ),
@@ -150,39 +164,43 @@ class _MyHomePageState extends State<MyHomePage> {
       // compute "flex" values, e.g. 460, 540
       // will be used for relative sizing of the horizontal bar
       _share1 = (_share * 1000).round();
-      _share2 = ((1 -_share) * 1000).round();
+      _share2 = ((1 - _share) * 1000).round();
       log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
     });
   }
 
-  double calcSum(origin) => _expenses.where((element) => element.origin == origin).map((element) => element.value).reduce((value, element) => value + element);
+  double calcSum(origin) => _expenses
+      .where((element) => element.origin == origin)
+      .map((element) => element.value)
+      .reduce((value, element) => value + element);
 
   Widget _buildListView() {
     return ListView.builder(
         itemCount: _expenses.length,
         padding: EdgeInsets.all(4.0),
         itemBuilder: (context, i) {
-      return Column(
-        children: [
-          ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(niceAmount(_expenses[i].value)),
-                  Text(niceDate(_expenses[i].when.toDate())),
-                ],
+          return Column(
+            children: [
+              ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(niceAmount(_expenses[i].value)),
+                    Text(niceDate(_expenses[i].when.toDate())),
+                  ],
+                ),
+                leading: Icon(
+                  Icons.account_circle,
+                  color: _expenses[i].origin == 'her'
+                      ? Colors.purple
+                      : Colors.lightGreen,
+                ),
+                trailing: Icon(Icons.remove_circle_outline_outlined),
               ),
-              leading: Icon(
-                Icons.account_circle,
-                color: _expenses[i].origin == 'her' ? Colors.purple : Colors.lightGreen
-                ,
-              ),
-              trailing: Icon(Icons.remove_circle_outline_outlined),
-          ),
-          Divider()
-        ],
-      );
-    });
+              Divider()
+            ],
+          );
+        });
   }
 
   String niceAmount(double amount) => '€ ${formatter.format(amount)}';
@@ -194,9 +212,12 @@ class _MyHomePageState extends State<MyHomePage> {
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = DateTime(now.year, now.month, now.day - 1);
 
-    if (monthDay == today) return "today";
-    else if (monthDay == yesterday) return "yesterday";
-    else return '${monthDay.month}/${monthDay.day}';
+    if (monthDay == today)
+      return "today";
+    else if (monthDay == yesterday)
+      return "yesterday";
+    else
+      return '${monthDay.month}/${monthDay.day}';
   }
 }
 
