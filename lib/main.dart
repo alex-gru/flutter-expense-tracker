@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+        primarySwatch: Colors.lightBlue,
       ),
       home: MyHomePage(title: 'Household Expenses'),
     );
@@ -36,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final formatter = NumberFormat("#,###.0#");
   double _val1 = 0;
   double _val2 = 0;
   List<Expense> _expenses = [];
@@ -74,8 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '$_val1',
-                        style: Theme.of(context).textTheme.headline2,
+                        niceAmount(_val1),
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                       Text(
                         "her",
@@ -87,8 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '$_val2',
-                        style: Theme.of(context).textTheme.headline2,
+                        niceAmount(_val2),
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                       Text(
                         "him",
@@ -139,20 +141,43 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildListView() {
     return ListView.builder(
         itemCount: _expenses.length,
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(4.0),
         itemBuilder: (context, i) {
-      return ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(_expenses[i].origin),
-              Text(_expenses[i].value.toString()),
-              Text(_expenses[i].when.toDate().toString()),
-            ],
+      return Column(
+        children: [
+          ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(niceAmount(_expenses[i].value)),
+                  Text(niceDate(_expenses[i].when.toDate())),
+                ],
+              ),
+              leading: Icon(
+                Icons.account_circle,
+                color: _expenses[i].origin == 'her' ? Colors.purple : Colors.lightGreen
+                ,
+              ),
+              trailing: Icon(Icons.remove_circle_outline_outlined),
           ),
-          trailing: Icon(Icons.remove_circle_outline_outlined),
+          Divider()
+        ],
       );
     });
+  }
+
+  String niceAmount(double amount) => '€ ${formatter.format(amount)}';
+
+  String niceDate(DateTime dateTime) {
+    // https://stackoverflow.com/a/54391552/2472398
+    final monthDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+
+    if (monthDay == today) return "today";
+    else if (monthDay == yesterday) return "yesterday";
+    else return '${monthDay.month}/${monthDay.day}';
   }
 }
 
