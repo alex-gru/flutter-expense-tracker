@@ -132,7 +132,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     )),
                 flex: 1),
             Expanded(
-                child: Container(height: 400, child: _buildListView()),
+                child: Container(
+                    height: 400,
+                    child: _expenses.isEmpty
+                        ? Center(child: Text('Pretty empty here. Use the button to add expenses.'))
+                        : _buildListView()),
                 flex: 30),
           ],
         ),
@@ -166,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _val1 = calcSum('person1');
       _val2 = calcSum('person2');
       // share of person1 on total amount, e.g. 0.4599
-      final _share = _val1 / (_val1 + _val2);
+      final _share = _expenses.isEmpty ? 0.5 : _val1 / (_val1 + _val2);
       // compute "flex" values, e.g. 460, 540
       // will be used for relative sizing of the horizontal bar
       _share1 = (_share * 1000).round();
@@ -175,10 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  double calcSum(origin) => _expenses
-      .where((element) => element.origin == origin)
-      .map((element) => element.value)
-      .reduce((value, element) => value + element);
+  double calcSum(origin) => _expenses.isEmpty
+      ? 0.0
+      : _expenses
+          .where((element) => element.origin == origin)
+          .map((element) => element.value)
+          .reduce((value, element) => value + element);
 
   Widget _buildListView() {
     return ListView.builder(
@@ -271,7 +277,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return person == 'person1' ? Colors.purple : Colors.lightGreen;
   }
 
-  String niceAmount(double amount) => '€ ${formatter.format(amount)}';
+  String niceAmount(double amount) =>
+      amount == 0 ? '-' : '€ ${formatter.format(amount)}';
 
   String niceDate(DateTime dateTime) {
     // https://stackoverflow.com/a/54391552/2472398
