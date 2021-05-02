@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      themeMode: ThemeMode.dark,
       home: MyHomePage(title: 'Household Expenses'),
     );
   }
@@ -183,10 +187,10 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               ListTile(
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(niceAmount(_expenses[i].value)),
-                    Text(niceDate(_expenses[i].when.toDate())),
+                    Expanded(child: Text(niceAmount(_expenses[i].value)), flex: 3,),
+                    Expanded(child: Text(niceDate(_expenses[i].when.toDate())), flex: 2),
                   ],
                 ),
                 leading: Icon(
@@ -195,7 +199,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ? Colors.purple
                       : Colors.lightGreen,
                 ),
-                trailing: Icon(Icons.remove_circle_outline_outlined),
+                trailing: Icon(Icons.remove_circle_outline_outlined, color: Color(
+                    0xFF525252)),
               ),
               Divider()
             ],
