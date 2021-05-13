@@ -93,7 +93,7 @@ class _AddDialogState extends State<AddDialog> {
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: ConstrainedBox(
               child: TextField(
-                onChanged: (value) => _text = value,
+                onChanged: (value) => setState(() => _text = value),
                 keyboardType: TextInputType.text,
                 maxLines: null,
                 decoration: InputDecoration(
@@ -108,21 +108,20 @@ class _AddDialogState extends State<AddDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _amount == null ? null : () {
+          onPressed: _amount == null || _text == null || _text.isEmpty ? null : () {
             var _expense =
             Expense.create(_person, _amount, Timestamp.now(), _text);
             FirebaseFirestore.instance
                 .collection('expenses')
                 .add({
-              'origin': _expense.origin,
+              'person': _expense.person,
               'value': _expense.value,
               'when': _expense.when,
               'text': _expense.text
             })
                 .then((value) => Navigator.pop(context, RESULT.ADDED))
                 .catchError((e) => log(
-                'Could not add new expense to Firebase collection. '
-                    'origin: ${_expense.origin}, amount: ${_expense.value}'));
+                'Could not add new expense to Firebase collection. ${_expense.toString()}'));
           },
           child: Text('Add'),
         ),

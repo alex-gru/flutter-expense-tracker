@@ -139,7 +139,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
         querySnapshot.docs.forEach((document) {
           _expenses.add(Expense(
             document.id,
-            document.get('origin'),
+            document.get('person'),
             document.get('value'),
             document.get('when'),
             document.get('text'),

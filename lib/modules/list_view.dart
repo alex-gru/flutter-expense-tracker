@@ -48,15 +48,14 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                  child:
-                      Text(expenses[i].text.isNotEmpty ? expenses[i].text : ''),
+                  child: Text(expenses[i].text),
                 ),
                 leading: Tooltip(
                   child: Icon(
                     Icons.account_circle,
-                    color: getPersonColor(expenses[i].origin, persons),
+                    color: getPersonColor(expenses[i].person, persons),
                   ),
-                  message: expenses[i].origin,
+                  message: expenses[i].person,
                 ),
                 trailing: Tooltip(
                   child: IconButton(

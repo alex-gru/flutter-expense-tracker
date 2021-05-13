@@ -33,11 +33,11 @@ String shortDate(Timestamp timestamp) {
   return dateTimeFormatter.format(dateTime);
 }
 
-double calcSum(origin, expenses) {
-  var expensesForOrigin = expenses.where((element) => element.origin == origin);
-  return expensesForOrigin.isEmpty
+double calcSum(person, expenses) {
+  var expensesForPerson = expenses.where((element) => element.person == person);
+  return expensesForPerson.isEmpty
       ? 0.0
-      : expensesForOrigin
+      : expensesForPerson
           .map((element) => element.value)
           .reduce((value, element) => value + element);
 }

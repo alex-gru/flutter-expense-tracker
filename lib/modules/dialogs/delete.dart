@@ -36,13 +36,13 @@ class _DeleteDialogState extends State<DeleteDialog> {
             Expanded(
               child: Icon(
                 Icons.account_circle,
-                color: getPersonColor(expense.origin, persons),
+                color: getPersonColor(expense.person, persons),
               ),
               flex: 2,
             ),
             Expanded(
               child: Text(
-                expense.origin,
+                expense.person,
               ),
               flex: 4,
             ),
@@ -64,8 +64,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
                 .doc(expense.id)
                 .delete()
                 .catchError((e) => log(
-                    'Could not delete entry from Firebase collection. '
-                    'id: ${expense.id}, origin: ${expense.origin}, amount: ${expense.value}'));
+                'Could not delete entry from Firebase collection. ${expense.toString()}'));
           },
           child: Text('Delete'),
         ),
