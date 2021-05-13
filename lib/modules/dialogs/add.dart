@@ -28,7 +28,7 @@ class _AddDialogState extends State<AddDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add new Expense'),
+      title: const Text('Add Expense'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -105,7 +105,7 @@ class _AddDialogState extends State<AddDialog> {
                 maxLines: null,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Describe your purchase',
+                  labelText: 'Describe the expense',
                 ),
               ),
               constraints: BoxConstraints.tight(Size(200, 100)),
