@@ -48,7 +48,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
             ),
             Expanded(
               child: Text(
-                '${niceAmount(expense.value)}',
+                '${prettifyAmount(expense.value)}',
               ),
               flex: 4,
             ),

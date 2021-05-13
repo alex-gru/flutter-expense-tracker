@@ -53,8 +53,8 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TotalBalance(balance: _val0, person: _persons.elementAt(0)),
-                    TotalBalance(balance: _val1, person: _persons.elementAt(1)),
+                    TotalBalance(balance: _val0, person: _persons.elementAt(0), persons: _persons),
+                    TotalBalance(balance: _val1, person: _persons.elementAt(1), persons: _persons),
                   ],
                 ),
               ),

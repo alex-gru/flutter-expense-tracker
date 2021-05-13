@@ -35,7 +35,7 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(niceAmount(expenses[i].value)),
+                      child: Text(prettifyAmount(expenses[i].value)),
                       flex: 3,
                     ),
                     Expanded(

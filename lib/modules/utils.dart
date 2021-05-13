@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-final amountFormatter = NumberFormat("#,###.0#");
+final amountFormatter = NumberFormat("#,###.00#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 
 MaterialColor getPersonColor(String person, List<String> persons) {
   return persons.indexOf(person) == 0 ? Colors.purple : Colors.lightGreen;
 }
 
-String niceAmount(double amount) =>
+String prettifyAmount(double amount) =>
     amount == 0 ? '€ 0' : '€ ${amountFormatter.format(amount)}';
 
 String niceDate(Timestamp timestamp) {
