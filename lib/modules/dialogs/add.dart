@@ -41,10 +41,6 @@ class _AddDialogState extends State<AddDialog> {
                 itemHeight: 62,
                 icon: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: Icon(
-                    Icons.account_circle,
-                    color: getPersonColor(_person, persons),
-                  ),
                 ),
                 onChanged: (String newValue) {
                   setState(() {
@@ -54,8 +50,19 @@ class _AddDialogState extends State<AddDialog> {
                 items: persons.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(
-                      value,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                          child: Icon(
+                            Icons.account_circle,
+                            color: getPersonColor(value, persons),
+                          ),
+                        ),
+                        Text(
+                          value,
+                        ),
+                      ],
                     ),
                   );
                 }).toList(),
