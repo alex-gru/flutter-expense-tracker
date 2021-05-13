@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'modules/dialog-result.dart';
 import 'modules/expense.dart';
 import 'modules/expense_balance.dart';
+import 'modules/relative-balance.dart';
 import 'modules/utils.dart';
 
 Future<void> main() async {
@@ -97,18 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 20,
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Container(
-                            color: Colors.purple,
-                          ),
-                          flex: _share1,
-                        ),
-                        Expanded(
-                          child: Container(
-                            color: Colors.lightGreen,
-                          ),
-                          flex: _share2,
-                        ),
+                        RelativeBalance(share: _share1, person: _persons.elementAt(0), persons: _persons),
+                        RelativeBalance(share: _share2, person: _persons.elementAt(1), persons: _persons),
                       ],
                     )),
                 flex: 1),
