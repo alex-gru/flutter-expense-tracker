@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 final amountFormatter = NumberFormat("#,###.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 
-MaterialColor getPersonColor(String person) {
-  return person == 'person1' ? Colors.purple : Colors.lightGreen;
+MaterialColor getPersonColor(String person, List<String> persons) {
+  return persons.indexOf(person) == 0 ? Colors.purple : Colors.lightGreen;
 }
 
 String niceAmount(double amount) =>

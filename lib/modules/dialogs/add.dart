@@ -9,18 +9,21 @@ import '../expense.dart';
 import '../utils.dart';
 
 class AddDialog extends StatefulWidget {
-  AddDialog() : super();
+  List<String> persons = [];
+
+  AddDialog(List<String> persons) : this.persons = persons;
 
   @override
-  _AddDialogState createState() => new _AddDialogState();
+  _AddDialogState createState() => new _AddDialogState(persons);
 }
 
 class _AddDialogState extends State<AddDialog> {
-  String _origin = 'person1';
+  List<String> persons = [];
+  String _person;
   double _amount;
   String _text;
 
-  _AddDialogState();
+  _AddDialogState(List<String> persons) : this.persons = persons, this._person = persons.elementAt(0);
 
   @override
   Widget build(BuildContext context) {
@@ -34,22 +37,21 @@ class _AddDialogState extends State<AddDialog> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               DropdownButton<String>(
-                value: _origin,
+                value: _person,
                 itemHeight: 62,
                 icon: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                   child: Icon(
                     Icons.account_circle,
-                    color: getPersonColor(_origin),
+                    color: getPersonColor(_person, persons),
                   ),
                 ),
                 onChanged: (String newValue) {
                   setState(() {
-                    _origin = newValue;
+                    _person = newValue;
                   });
                 },
-                items: <String>['person1', 'person2']
-                    .map<DropdownMenuItem<String>>((String value) {
+                items: persons.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -108,7 +110,7 @@ class _AddDialogState extends State<AddDialog> {
         TextButton(
           onPressed: _amount == null ? null : () {
             var _expense =
-            Expense.create(_origin, _amount, Timestamp.now(), _text);
+            Expense.create(_person, _amount, Timestamp.now(), _text);
             FirebaseFirestore.instance
                 .collection('expenses')
                 .add({

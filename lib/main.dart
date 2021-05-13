@@ -45,23 +45,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  double _val0 = 0;
   double _val1 = 0;
-  double _val2 = 0;
   int _share1 = 2;
   int _share2 = 2;
 
   List<Expense> _expenses = [];
+  List<String> _persons = ["Person 1", "Person 2"];
 
   void _incrementCounter() {
     setState(() {
+      _val0++;
       _val1++;
-      _val2++;
     });
   }
 
   @override
   void initState() {
-    queryExpenses();
+    queryPersons().then((value) => queryExpenses());
   }
 
   @override
@@ -88,34 +89,34 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            niceAmount(_val1),
+                            niceAmount(_val0),
                             style: Theme.of(context).textTheme.headline4,
                           ),
                           Text(
-                            "person1",
+                            _persons.elementAt(0),
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],
                       ),
                       message:
-                          'In total, person1 has spent ${niceAmount(_val1)}',
+                          'In total, ${_persons.elementAt(0)} has spent ${niceAmount(_val0)}',
                     ),
                     Tooltip(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            niceAmount(_val2),
+                            niceAmount(_val1),
                             style: Theme.of(context).textTheme.headline4,
                           ),
                           Text(
-                            "person2",
+                            _persons.elementAt(1),
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],
                       ),
                       message:
-                          'In total, person2 has spent ${niceAmount(_val2)}',
+                          'In total, ${_persons.elementAt(1)} has spent ${niceAmount(_val1)}',
                     ),
                   ],
                 ),
@@ -153,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     color: Colors.grey,
                                     fontWeight: FontWeight.w300)))
                         : ExpenseListView(
-                            expenses: _expenses, callback: queryExpenses)),
+                            expenses: _expenses, callback: queryExpenses, persons: _persons)),
                 flex: 30),
           ],
         ),
@@ -162,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (_) => AddDialog())
+              builder: (_) => AddDialog(_persons))
               .then((value) {
             if (value == RESULT.ADDED) {
               queryExpenses();
@@ -176,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void queryExpenses() {
+  Future<void> queryExpenses() async {
     log('call: queryExpenses');
     Query query = FirebaseFirestore.instance.collection('expenses');
     query.orderBy('when', descending: true).get().then((querySnapshot) async {
@@ -192,16 +193,31 @@ class _MyHomePageState extends State<MyHomePage> {
           ));
         });
         // total amounts, e.g. € 38.58, € 45.31
-        _val1 = calcSum('person1', _expenses);
-        _val2 = calcSum('person2', _expenses);
+        _val0 = calcSum(_persons.elementAt(0), _expenses);
+        _val1 = calcSum(_persons.elementAt(1), _expenses);
         // share of person1 on total amount, e.g. 0.4599
-        final _share = _expenses.isEmpty ? 0.5 : _val1 / (_val1 + _val2);
+        final _share = _expenses.isEmpty ? 0.5 : _val0 / (_val0 + _val1);
         // compute "flex" values, e.g. 460, 540
         // will be used for relative sizing of the horizontal bar
         _share1 = (_share * 1000).round();
         _share2 = ((1 - _share) * 1000).round();
         log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
       });
+      return Future.value(() => {});
+    });
+  }
+
+  Future<void> queryPersons() async {
+    log('call: queryPersons');
+    Query query = FirebaseFirestore.instance.collection('persons').limit(1);
+    query.get().then((querySnapshot) async {
+      setState(() {
+        _persons.clear();
+        var result = querySnapshot.docs.first;
+        _persons.add(result.get('person1'));
+        _persons.add(result.get('person2'));
+      });
+      return Future.value(() => {});
     });
   }
 }

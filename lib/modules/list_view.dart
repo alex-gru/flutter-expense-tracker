@@ -7,18 +7,20 @@ import 'expense.dart';
 
 class ExpenseListView extends StatefulWidget {
   final List<Expense> expenses;
+  final List<String> persons;
   final void Function() callback;
 
-  ExpenseListView({this.expenses, this.callback});
+  ExpenseListView({List<Expense> expenses, Function callback, List<String> persons}) : this.expenses = expenses, this.callback = callback, this.persons = persons;
 
   @override
-  _ExpenseListViewState createState() => new _ExpenseListViewState(expenses);
+  _ExpenseListViewState createState() => new _ExpenseListViewState(expenses, persons);
 }
 
 class _ExpenseListViewState extends State<ExpenseListView> {
   final List<Expense> expenses;
+  final List<String> persons;
 
-  _ExpenseListViewState(this.expenses);
+  _ExpenseListViewState(List<Expense> expenses, List<String> persons) : this.expenses = expenses, this.persons = persons;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                 leading: Tooltip(
                   child: Icon(
                     Icons.account_circle,
-                    color: getPersonColor(expenses[i].origin),
+                    color: getPersonColor(expenses[i].origin, persons),
                   ),
                   message: expenses[i].origin,
                 ),
@@ -64,7 +66,8 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                         showDialog(
                             context: context,
                             builder: (_) => DeleteDialog(
-                                  expense: expenses[i],
+                                expense: expenses[i],
+                                persons: persons
                                 )).then((value) {
                           if (value == RESULT.DELETED) {
                             this.widget.callback();

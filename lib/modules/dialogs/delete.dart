@@ -9,17 +9,19 @@ import '../utils.dart';
 
 class DeleteDialog extends StatefulWidget {
   final Expense expense;
+  List<String> persons = [];
 
-  DeleteDialog({Expense expense}) : this.expense = expense;
+  DeleteDialog({Expense expense, List<String> persons}) : this.expense = expense, this.persons = persons;
 
   @override
-  _DeleteDialogState createState() => new _DeleteDialogState(expense);
+  _DeleteDialogState createState() => new _DeleteDialogState(expense, persons);
 }
 
 class _DeleteDialogState extends State<DeleteDialog> {
   final Expense expense;
+  List<String> persons = [];
 
-  _DeleteDialogState(this.expense);
+  _DeleteDialogState(Expense expense, List<String> persons) : this.expense = expense, this.persons = persons;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,15 @@ class _DeleteDialogState extends State<DeleteDialog> {
             Expanded(
               child: Icon(
                 Icons.account_circle,
-                color: getPersonColor(expense.origin),
+                color: getPersonColor(expense.origin, persons),
               ),
-              flex: 1,
+              flex: 2,
+            ),
+            Expanded(
+              child: Text(
+                expense.origin,
+              ),
+              flex: 4,
             ),
             Expanded(
               child: Text(
