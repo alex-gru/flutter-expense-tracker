@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'modules/dialog-result.dart';
 import 'modules/expense.dart';
+import 'modules/expense_balance.dart';
 import 'modules/utils.dart';
 
 Future<void> main() async {
@@ -84,40 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Tooltip(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            niceAmount(_val0),
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          Text(
-                            _persons.elementAt(0),
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ],
-                      ),
-                      message:
-                          'In total, ${_persons.elementAt(0)} has spent ${niceAmount(_val0)}',
-                    ),
-                    Tooltip(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            niceAmount(_val1),
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          Text(
-                            _persons.elementAt(1),
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ],
-                      ),
-                      message:
-                          'In total, ${_persons.elementAt(1)} has spent ${niceAmount(_val1)}',
-                    ),
+                    ExpenseBalance(balance: _val0, person: _persons.elementAt(0)),
+                    ExpenseBalance(balance: _val1, person: _persons.elementAt(1)),
                   ],
                 ),
               ),
