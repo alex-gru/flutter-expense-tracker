@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 
 import 'dialogs/delete.dart';
-import 'dialog-result.dart';
+import 'dialogs/dialog-result.dart';
 import 'expense.dart';
 
 class ExpenseListView extends StatefulWidget {

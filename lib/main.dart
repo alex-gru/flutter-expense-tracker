@@ -7,7 +7,7 @@ import 'package:flutter_expense_tracker/modules/list_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'modules/dialog-result.dart';
+import 'modules/dialogs/dialog-result.dart';
 import 'modules/expense.dart';
 import 'modules/expense_balance.dart';
 import 'modules/relative-balance.dart';
