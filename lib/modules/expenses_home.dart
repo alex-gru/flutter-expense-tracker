@@ -36,6 +36,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
 
   @override
   Widget build(BuildContext context) {
+    const double relativeBalanceBarHeight = 20;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -60,16 +61,27 @@ class _ExpensesHomeState extends State<ExpensesHome> {
               ),
               flex: 6,
             ),
-            Expanded(
-                child: Container(
-                    height: 20,
-                    child: Row(
-                      children: [
-                        RelativeBalance(share: _share1, person: _persons.elementAt(0), persons: _persons),
-                        RelativeBalance(share: _share2, person: _persons.elementAt(1), persons: _persons),
-                      ],
-                    )),
-                flex: 1),
+            Stack(alignment: AlignmentDirectional.center, children: [
+              Container(
+                  height: relativeBalanceBarHeight,
+                  child: Row(
+                    children: [
+                      RelativeBalance(
+                          share: _share1,
+                          person: _persons.elementAt(0),
+                          persons: _persons),
+                      RelativeBalance(
+                          share: _share2,
+                          person: _persons.elementAt(1),
+                          persons: _persons),
+                    ],
+                  )),
+              Container(
+                width: 5,
+                height: relativeBalanceBarHeight + 10,
+                color: Theme.of(context).accentColor,
+              )
+            ]),
             Expanded(
                 child: Container(
                     height: 400,
