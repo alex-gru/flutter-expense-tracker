@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 
-class ExpenseBalance extends StatelessWidget {
-  const ExpenseBalance({
+class TotalBalance extends StatelessWidget {
+  const TotalBalance({
     Key key,
     @required double balance,
     @required String person,

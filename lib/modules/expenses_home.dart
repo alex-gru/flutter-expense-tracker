@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/modules/relative-balance.dart';
+import 'package:flutter_expense_tracker/modules/balance/relative_balance.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 
 import 'dialogs/add.dart';
-import 'dialogs/dialog-result.dart';
+import 'dialogs/dialog_result.dart';
 import 'expense.dart';
-import 'expense_balance.dart';
+import 'balance/total_balance.dart';
 import 'list_view.dart';
 
 class ExpensesHome extends StatefulWidget {
@@ -53,8 +53,8 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ExpenseBalance(balance: _val0, person: _persons.elementAt(0)),
-                    ExpenseBalance(balance: _val1, person: _persons.elementAt(1)),
+                    TotalBalance(balance: _val0, person: _persons.elementAt(0)),
+                    TotalBalance(balance: _val1, person: _persons.elementAt(1)),
                   ],
                 ),
               ),
