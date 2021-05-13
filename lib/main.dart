@@ -17,10 +17,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   debugPaintSizeEnabled = false;
-  runApp(MyApp());
+  runApp(ExpensesApp());
 }
 
-class MyApp extends StatelessWidget {
+class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,21 +32,21 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.dark,
-      home: MyHomePage(title: 'Household Expenses'),
+      home: ExpensesHome(title: 'Household Expenses'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
+class ExpensesHome extends StatefulWidget {
   final String title;
 
+  ExpensesHome({Key key, this.title}) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _ExpensesHomeState createState() => _ExpensesHomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ExpensesHomeState extends State<ExpensesHome> {
   double _val0 = 0;
   double _val1 = 0;
   int _share1 = 2;
@@ -54,13 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Expense> _expenses = [];
   List<String> _persons = ["Person 1", "Person 2"];
-
-  void _incrementCounter() {
-    setState(() {
-      _val0++;
-      _val1++;
-    });
-  }
 
   @override
   void initState() {
