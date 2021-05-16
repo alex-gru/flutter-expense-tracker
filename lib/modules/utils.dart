@@ -10,10 +10,10 @@ final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 const PREF_DARK_MODE = 'darkMode';
 const PREF_PERSON = 'selectedPerson';
 
-MaterialColor getPersonColor(String person, List<Person> persons) {
+Color getPersonColor(String person, List<Person> persons) {
   return persons.indexWhere((p) => p.person == person) == 0
-      ? Colors.purple
-      : Colors.green;
+      ? Colors.teal
+      : Colors.deepOrangeAccent;
 }
 
 String prettifyAmount(double amount) =>
