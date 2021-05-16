@@ -50,7 +50,7 @@ double calcSum(person, expenses) {
           .reduce((value, element) => value + element);
 }
 
-void calcBalance(List<Person> persons, List<Expense> expenses) {
+void calcBalance(List<Person> persons, List<Expense> expenses, BuildContext context) {
   var _person0 = persons.elementAt(0).person;
   var _person1 = persons.elementAt(1).person;
 
@@ -62,11 +62,12 @@ void calcBalance(List<Person> persons, List<Expense> expenses) {
   var _share0 = expenses.isEmpty ? 0.5 : _sum0 / (_sum0 + _sum1);
   var _share1 = 1 - _share0;
 
-  // "flex" values are used for sizing of the relative balance bar (e.g. 460, 540)
-  var _flex0 = (_share0 * 1000).round();
-  var _flex1 = (_share1 * 1000).round();
+  // "progress" values are used for sizing of the relative balance bar
+  double width = MediaQuery.of(context).size.width;
+  var _progress0 = _share0 * width;
+  var _progress1 = _share1 * width;
 
   persons.clear();
-  persons.add(Person(_person0, _sum0, _share0, _flex0));
-  persons.add(Person(_person1, _sum1, _share1, _flex1));
+  persons.add(Person(_person0, _sum0, _share0, _progress0));
+  persons.add(Person(_person1, _sum1, _share1, _progress1));
 }

@@ -43,7 +43,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
         ],
       ),
       body: AnimatedOpacity(
-        opacity: _loading ? 0.2 : 1,
+        opacity: _loading ? 0.8 : 1,
         duration: Duration(milliseconds: 100),
         child: Center(
           child: Column(
@@ -120,7 +120,15 @@ class _ExpensesHomeState extends State<ExpensesHome> {
 
   Future<void> queryExpenses() async {
     log('call: queryExpenses');
-    _loading = true;
+
+    setState(() {
+      double width = MediaQuery.of(context).size.width;
+      _loading = true;
+      _persons.elementAt(0).progress = 0.5 * width;
+      _persons.elementAt(1).progress = 0.5 * width;
+
+    });
+
     Query query = FirebaseFirestore.instance.collection('expenses');
     return query
         .where('person', whereIn: _persons.map((e) => e.person).toList())
@@ -136,7 +144,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
             document.get('text'),
           ));
         });
-        calcBalance(_persons, _expenses);
+        calcBalance(_persons, _expenses, context);
         log('${_persons.toString()}');
         _loading = false;
       });

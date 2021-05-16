@@ -15,19 +15,21 @@ class RelativeBalance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      width: _person.progress,
       child: Stack(
         alignment: getAlignment(),
         children: [
           Container(color: getPersonColor(_person.person, _persons)),
           Text(
-              prettifyShare(_person.share),
+            prettifyShare(_person.share),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
-      flex: _person.flex,
     );
   }
 
