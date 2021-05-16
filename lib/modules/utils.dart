@@ -8,6 +8,7 @@ final amountFormatter = NumberFormat("#,###.00#");
 final shareFormatter = NumberFormat("##.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 const PREF_DARK_MODE = 'darkMode';
+const PREF_PERSON = 'selectedPerson';
 
 MaterialColor getPersonColor(String person, List<Person> persons) {
   return persons.indexWhere((p) => p.person == person) == 0

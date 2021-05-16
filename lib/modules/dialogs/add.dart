@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../person.dart';
 import 'dialog_result.dart';
@@ -24,10 +25,18 @@ class _AddDialogState extends State<AddDialog> {
   double _amount;
   String _text;
 
-  _AddDialogState(List<Person> persons) : this.persons = persons, this._person = persons.elementAt(0).person;
+  _AddDialogState(List<Person> persons) : this.persons = persons;
 
   @override
   Widget build(BuildContext context) {
+
+    SharedPreferences.getInstance().then((sharedPref) {
+      setState(() {
+        // choose previously selected person
+        _person = sharedPref.getString(PREF_PERSON) ?? persons.elementAt(0).person;
+      });
+    });
+
     return AlertDialog(
       title: const Text('Add Expense'),
       content: Column(
@@ -44,6 +53,7 @@ class _AddDialogState extends State<AddDialog> {
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                 ),
                 onChanged: (String newValue) {
+                  SharedPreferences.getInstance().then((sharedPref) => sharedPref.setString(PREF_PERSON, _person));
                   setState(() {
                     _person = newValue;
                   });
