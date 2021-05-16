@@ -113,7 +113,9 @@ class _ExpensesHomeState extends State<ExpensesHome> {
   Future<void> queryExpenses() async {
     log('call: queryExpenses');
     Query query = FirebaseFirestore.instance.collection('expenses');
-    query.orderBy('when', descending: true).get().then((querySnapshot) async {
+    return query
+        .where('person', whereIn: _persons.map((e) => e.person).toList())
+        .orderBy('when', descending: true).get().then((querySnapshot) async {
       setState(() {
         _expenses.clear();
         querySnapshot.docs.forEach((document) {
@@ -126,23 +128,21 @@ class _ExpensesHomeState extends State<ExpensesHome> {
           ));
         });
         calcBalance(_persons, _expenses);
-        log('\n${_persons.toString()}');
+        log('${_persons.toString()}');
       });
-      return Future.value(() => {});
     });
   }
 
   Future<void> queryPersons() async {
     log('call: queryPersons');
     Query query = FirebaseFirestore.instance.collection('persons').limit(1);
-    query.get().then((querySnapshot) async {
+    return query.get().then((querySnapshot) async {
       setState(() {
         _persons.clear();
         var result = querySnapshot.docs.first;
         _persons.add(Person.create(result.get('person1')));
         _persons.add(Person.create(result.get('person2')));
       });
-      return Future.value(() => {});
     });
   }
 
