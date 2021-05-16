@@ -1,0 +1,4 @@
+enum Align {
+  START,
+  END
+}

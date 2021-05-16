@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/balance/relative_balance.dart';
 import 'package:flutter_expense_tracker/modules/person.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
+import 'package:flutter_expense_tracker/modules/balance/align.dart' as align;
 
 import 'dialogs/add.dart';
 import 'dialogs/dialog_result.dart';
@@ -64,10 +65,12 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                     children: _persons.isEmpty ? [] : [
                       RelativeBalance(
                           person: _persons.elementAt(0),
-                          persons: _persons),
+                          persons: _persons,
+                          alignPercentage: align.Align.START),
                       RelativeBalance(
                           person: _persons.elementAt(1),
-                          persons: _persons),
+                          persons: _persons,
+                          alignPercentage: align.Align.END),
                     ],
                   )),
               Container(

@@ -5,6 +5,7 @@ import 'package:flutter_expense_tracker/modules/person.dart';
 import 'package:intl/intl.dart';
 
 final amountFormatter = NumberFormat("#,###.00#");
+final shareFormatter = NumberFormat("##.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 
 MaterialColor getPersonColor(String person, List<Person> persons) {
@@ -13,6 +14,9 @@ MaterialColor getPersonColor(String person, List<Person> persons) {
 
 String prettifyAmount(double amount) =>
     amount == 0 ? '€ 0' : '€ ${amountFormatter.format(amount)}';
+
+String prettifyShare(double share) =>
+    share == 0 ? '' : '${shareFormatter.format(share*100)}%';
 
 String niceDate(Timestamp timestamp) {
   // https://stackoverflow.com/a/54391552/2472398
