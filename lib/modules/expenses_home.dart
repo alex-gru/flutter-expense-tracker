@@ -31,7 +31,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
 
   @override
   void initState() {
-    queryPersons().then((value) => queryExpenses());
+    queryPersons().then((value) => queryExpenses(true));
   }
 
   @override
@@ -53,7 +53,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
           ),
           Tooltip(
               message: 'Refresh',
-              child: IconButton(icon: Icon(Icons.refresh), onPressed: queryExpenses)),
+              child: IconButton(icon: Icon(Icons.refresh), onPressed: () => queryExpenses(true))),
         ],
       ),
       body: AnimatedOpacity(
@@ -108,7 +108,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                                   color: Colors.grey,
                                   fontWeight: FontWeight.w300)))
                           : ExpenseListView(
-                          expenses: _expenses, callback: queryExpenses, persons: _persons)),
+                          expenses: _expenses, callback: () => queryExpenses(false), persons: _persons)),
                   flex: 30),
             ],
           ),
@@ -121,7 +121,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
               builder: (_) => AddDialog(_persons))
               .then((value) {
             if (value == RESULT.ADDED) {
-              queryExpenses();
+              queryExpenses(false);
             }
             return null;
           });
@@ -132,15 +132,15 @@ class _ExpensesHomeState extends State<ExpensesHome> {
     );
   }
 
-  Future<void> queryExpenses() async {
+  Future<void> queryExpenses(bool animateFromCenter) async {
     log('call: queryExpenses');
-
     setState(() {
-      double width = MediaQuery.of(context).size.width;
       _loading = true;
-      _persons.elementAt(0).progress = 0.5 * width;
-      _persons.elementAt(1).progress = 0.5 * width;
-
+      if (animateFromCenter) {
+        double width = MediaQuery.of(context).size.width;
+        _persons.elementAt(0).progress = 0.5 * width;
+        _persons.elementAt(1).progress = 0.5 * width;
+      }
     });
 
     Query query = FirebaseFirestore.instance.collection('expenses');
