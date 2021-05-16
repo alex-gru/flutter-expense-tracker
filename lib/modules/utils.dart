@@ -18,7 +18,7 @@ String prettifyAmount(double amount) =>
     amount == 0 ? '€ 0' : '€ ${amountFormatter.format(amount)}';
 
 String prettifyShare(double share) =>
-    share == 0 ? '' : '${shareFormatter.format(share*100)}%';
+    share == 0 ? '' : ' ${shareFormatter.format(share*100)}% ';
 
 String niceDate(Timestamp timestamp) {
   // https://stackoverflow.com/a/54391552/2472398

@@ -20,13 +20,10 @@ class RelativeBalance extends StatelessWidget {
         alignment: getAlignment(),
         children: [
           Container(color: getPersonColor(_person.person, _persons)),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Text(
-                prettifyShare(_person.share),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          Text(
+              prettifyShare(_person.share),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
