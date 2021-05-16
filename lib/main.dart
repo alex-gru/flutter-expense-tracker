@@ -14,7 +14,7 @@ Future<void> main() async {
 class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var title = 'Household Expenses';
+    var title = 'Expense Tracker';
     return MaterialApp(
       title: title,
       theme: ThemeData(
