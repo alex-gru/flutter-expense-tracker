@@ -27,7 +27,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
   int _share2 = 2;
 
   List<Expense> _expenses = [];
-  List<String> _persons = ["Person 1", "Person 2"]; // placeholders
+  List<String> _persons = ["", ""]; // placeholders
 
   @override
   void initState() {
