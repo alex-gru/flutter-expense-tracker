@@ -25,6 +25,7 @@ class ExpensesHome extends StatefulWidget {
 class _ExpensesHomeState extends State<ExpensesHome> {
   List<Expense> _expenses = [];
   List<Person> _persons = [];
+  bool _loading = true;
 
   @override
   void initState() {
@@ -41,58 +42,62 @@ class _ExpensesHomeState extends State<ExpensesHome> {
           IconButton(icon: Icon(Icons.refresh), onPressed: queryExpenses)
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: _persons.isEmpty ? [] : [
-                    TotalBalance(person: _persons.elementAt(0), persons: _persons),
-                    TotalBalance(person: _persons.elementAt(1), persons: _persons),
-                  ],
-                ),
-              ),
-              flex: 6,
-            ),
-            Stack(alignment: AlignmentDirectional.center, children: [
-              Container(
-                  height: relativeBalanceBarHeight,
+      body: AnimatedOpacity(
+        opacity: _loading ? 0.2 : 1,
+        duration: Duration(milliseconds: 100),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: _persons.isEmpty ? [] : [
-                      RelativeBalance(
-                          person: _persons.elementAt(0),
-                          persons: _persons,
-                          alignPercentage: align.Align.START),
-                      RelativeBalance(
-                          person: _persons.elementAt(1),
-                          persons: _persons,
-                          alignPercentage: align.Align.END),
+                      TotalBalance(person: _persons.elementAt(0), persons: _persons),
+                      TotalBalance(person: _persons.elementAt(1), persons: _persons),
                     ],
-                  )),
-              Container(
-                width: 5,
-                height: relativeBalanceBarHeight + 10,
-                color: Theme.of(context).accentColor,
-              )
-            ]),
-            Expanded(
-                child: Container(
-                    height: 400,
-                    child: _expenses.isEmpty
-                        ? Center(
-                        child: Text(
-                            'Pretty empty here. Use the button to add expenses.',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w300)))
-                        : ExpenseListView(
-                        expenses: _expenses, callback: queryExpenses, persons: _persons)),
-                flex: 30),
-          ],
+                  ),
+                ),
+                flex: 6,
+              ),
+              Stack(alignment: AlignmentDirectional.center, children: [
+                Container(
+                    height: relativeBalanceBarHeight,
+                    child: Row(
+                      children: _persons.isEmpty ? [] : [
+                        RelativeBalance(
+                            person: _persons.elementAt(0),
+                            persons: _persons,
+                            alignPercentage: align.Align.START),
+                        RelativeBalance(
+                            person: _persons.elementAt(1),
+                            persons: _persons,
+                            alignPercentage: align.Align.END),
+                      ],
+                    )),
+                Container(
+                  width: 5,
+                  height: relativeBalanceBarHeight + 10,
+                  color: Theme.of(context).accentColor,
+                )
+              ]),
+              Expanded(
+                  child: Container(
+                      height: 400,
+                      child: _expenses.isEmpty
+                          ? Center(
+                          child: Text(
+                              'Pretty empty here. Use the button to add expenses.',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w300)))
+                          : ExpenseListView(
+                          expenses: _expenses, callback: queryExpenses, persons: _persons)),
+                  flex: 30),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -115,6 +120,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
 
   Future<void> queryExpenses() async {
     log('call: queryExpenses');
+    _loading = true;
     Query query = FirebaseFirestore.instance.collection('expenses');
     return query
         .where('person', whereIn: _persons.map((e) => e.person).toList())
@@ -132,6 +138,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
         });
         calcBalance(_persons, _expenses);
         log('${_persons.toString()}');
+        _loading = false;
       });
     });
   }
