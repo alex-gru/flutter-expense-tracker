@@ -3,15 +3,16 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../person.dart';
 import 'dialog_result.dart';
 import '../expense.dart';
 import '../utils.dart';
 
 class DeleteDialog extends StatefulWidget {
   final Expense expense;
-  List<String> persons = [];
+  List<Person> persons = [];
 
-  DeleteDialog({Expense expense, List<String> persons}) : this.expense = expense, this.persons = persons;
+  DeleteDialog({Expense expense, List<Person> persons}) : this.expense = expense, this.persons = persons;
 
   @override
   _DeleteDialogState createState() => new _DeleteDialogState(expense, persons);
@@ -19,9 +20,9 @@ class DeleteDialog extends StatefulWidget {
 
 class _DeleteDialogState extends State<DeleteDialog> {
   final Expense expense;
-  List<String> persons = [];
+  List<Person> persons = [];
 
-  _DeleteDialogState(Expense expense, List<String> persons) : this.expense = expense, this.persons = persons;
+  _DeleteDialogState(Expense expense, List<Person> persons) : this.expense = expense, this.persons = persons;
 
   @override
   Widget build(BuildContext context) {

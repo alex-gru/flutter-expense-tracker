@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/modules/person.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 
 import 'dialogs/delete.dart';
@@ -7,10 +8,10 @@ import 'expense.dart';
 
 class ExpenseListView extends StatefulWidget {
   final List<Expense> expenses;
-  final List<String> persons;
+  final List<Person> persons;
   final void Function() callback;
 
-  ExpenseListView({List<Expense> expenses, Function callback, List<String> persons}) : this.expenses = expenses, this.callback = callback, this.persons = persons;
+  ExpenseListView({List<Expense> expenses, Function callback, List<Person> persons}) : this.expenses = expenses, this.callback = callback, this.persons = persons;
 
   @override
   _ExpenseListViewState createState() => new _ExpenseListViewState(expenses, persons);
@@ -18,9 +19,9 @@ class ExpenseListView extends StatefulWidget {
 
 class _ExpenseListViewState extends State<ExpenseListView> {
   final List<Expense> expenses;
-  final List<String> persons;
+  final List<Person> persons;
 
-  _ExpenseListViewState(List<Expense> expenses, List<String> persons) : this.expenses = expenses, this.persons = persons;
+  _ExpenseListViewState(List<Expense> expenses, List<Person> persons) : this.expenses = expenses, this.persons = persons;
 
   @override
   Widget build(BuildContext context) {

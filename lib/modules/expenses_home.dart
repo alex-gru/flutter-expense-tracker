@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/balance/relative_balance.dart';
+import 'package:flutter_expense_tracker/modules/person.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 
 import 'dialogs/add.dart';
@@ -21,13 +22,8 @@ class ExpensesHome extends StatefulWidget {
 }
 
 class _ExpensesHomeState extends State<ExpensesHome> {
-  double _val0 = 0;
-  double _val1 = 0;
-  int _share1 = 2;
-  int _share2 = 2;
-
   List<Expense> _expenses = [];
-  List<String> _persons = ["", ""]; // placeholders
+  List<Person> _persons = [];
 
   @override
   void initState() {
@@ -53,9 +49,9 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TotalBalance(balance: _val0, person: _persons.elementAt(0), persons: _persons),
-                    TotalBalance(balance: _val1, person: _persons.elementAt(1), persons: _persons),
+                  children: _persons.isEmpty ? [] : [
+                    TotalBalance(person: _persons.elementAt(0), persons: _persons),
+                    TotalBalance(person: _persons.elementAt(1), persons: _persons),
                   ],
                 ),
               ),
@@ -65,13 +61,11 @@ class _ExpensesHomeState extends State<ExpensesHome> {
               Container(
                   height: relativeBalanceBarHeight,
                   child: Row(
-                    children: [
+                    children: _persons.isEmpty ? [] : [
                       RelativeBalance(
-                          share: _share1,
                           person: _persons.elementAt(0),
                           persons: _persons),
                       RelativeBalance(
-                          share: _share2,
                           person: _persons.elementAt(1),
                           persons: _persons),
                     ],
@@ -131,16 +125,8 @@ class _ExpensesHomeState extends State<ExpensesHome> {
             document.get('text'),
           ));
         });
-        // total amounts, e.g. € 38.58, € 45.31
-        _val0 = calcSum(_persons.elementAt(0), _expenses);
-        _val1 = calcSum(_persons.elementAt(1), _expenses);
-        // share of person1 on total amount, e.g. 0.4599
-        final _share = _expenses.isEmpty ? 0.5 : _val0 / (_val0 + _val1);
-        // compute "flex" values, e.g. 460, 540
-        // will be used for relative sizing of the horizontal bar
-        _share1 = (_share * 1000).round();
-        _share2 = ((1 - _share) * 1000).round();
-        log('\n_share=$_share\n_share1=$_share1\n_share2=$_share2');
+        calcBalance(_persons, _expenses);
+        log('\n${_persons.toString()}');
       });
       return Future.value(() => {});
     });
@@ -153,10 +139,11 @@ class _ExpensesHomeState extends State<ExpensesHome> {
       setState(() {
         _persons.clear();
         var result = querySnapshot.docs.first;
-        _persons.add(result.get('person1'));
-        _persons.add(result.get('person2'));
+        _persons.add(Person.create(result.get('person1')));
+        _persons.add(Person.create(result.get('person2')));
       });
       return Future.value(() => {});
     });
   }
+
 }

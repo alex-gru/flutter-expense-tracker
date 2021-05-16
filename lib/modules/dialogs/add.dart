@@ -4,26 +4,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../person.dart';
 import 'dialog_result.dart';
 import '../expense.dart';
 import '../utils.dart';
 
 class AddDialog extends StatefulWidget {
-  List<String> persons = [];
+  List<Person> persons = [];
 
-  AddDialog(List<String> persons) : this.persons = persons;
+  AddDialog(List<Person> persons) : this.persons = persons;
 
   @override
   _AddDialogState createState() => new _AddDialogState(persons);
 }
 
 class _AddDialogState extends State<AddDialog> {
-  List<String> persons = [];
+  List<Person> persons = [];
   String _person;
   double _amount;
   String _text;
 
-  _AddDialogState(List<String> persons) : this.persons = persons, this._person = persons.elementAt(0);
+  _AddDialogState(List<Person> persons) : this.persons = persons, this._person = persons.elementAt(0).person;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class _AddDialogState extends State<AddDialog> {
                     _person = newValue;
                   });
                 },
-                items: persons.map<DropdownMenuItem<String>>((String value) {
+                items: persons.map((e) => e.person).map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Row(
