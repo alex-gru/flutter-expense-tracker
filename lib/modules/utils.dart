@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 final amountFormatter = NumberFormat("#,###.00#");
 final shareFormatter = NumberFormat("##.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
+const PREF_DARK_MODE = 'darkMode';
 
 MaterialColor getPersonColor(String person, List<Person> persons) {
   return persons.indexWhere((p) => p.person == person) == 0

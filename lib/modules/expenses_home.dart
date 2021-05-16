@@ -6,6 +6,8 @@ import 'package:flutter_expense_tracker/modules/balance/relative_balance.dart';
 import 'package:flutter_expense_tracker/modules/person.dart';
 import 'package:flutter_expense_tracker/modules/utils.dart';
 import 'package:flutter_expense_tracker/modules/balance/align.dart' as align;
+import 'package:flutter_restart/flutter_restart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dialogs/add.dart';
 import 'dialogs/dialog_result.dart';
@@ -39,7 +41,19 @@ class _ExpensesHomeState extends State<ExpensesHome> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(icon: Icon(Icons.refresh), onPressed: queryExpenses)
+          Tooltip(
+            message: 'Toggle Dark Mode',
+            child: IconButton(icon: Icon(Icons.nightlight_round), onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              setState(() async {
+                prefs.setBool(PREF_DARK_MODE, !(prefs.getBool(PREF_DARK_MODE) ?? false));
+                await FlutterRestart.restartApp();
+              });
+            }),
+          ),
+          Tooltip(
+              message: 'Refresh',
+              child: IconButton(icon: Icon(Icons.refresh), onPressed: queryExpenses)),
         ],
       ),
       body: AnimatedOpacity(
