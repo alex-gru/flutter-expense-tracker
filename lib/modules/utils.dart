@@ -9,7 +9,9 @@ final shareFormatter = NumberFormat("##.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 
 MaterialColor getPersonColor(String person, List<Person> persons) {
-  return persons.indexWhere((p) => p.person == person) == 0 ? Colors.purple : Colors.lightGreen;
+  return persons.indexWhere((p) => p.person == person) == 0
+      ? Colors.purple
+      : Colors.green;
 }
 
 String prettifyAmount(double amount) =>
