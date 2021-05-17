@@ -6,8 +6,11 @@ import '../person.dart';
 class TotalBalance extends StatelessWidget {
   const TotalBalance({
     Key key,
-    @required Person person, List<Person> persons,
-  }) :  _person = person, _persons = persons, super(key: key);
+    @required Person person,
+    List<Person> persons,
+  })  : _person = person,
+        _persons = persons,
+        super(key: key);
 
   final Person _person;
   final List<Person> _persons;
@@ -48,7 +51,7 @@ class TotalBalance extends StatelessWidget {
         ],
       ),
       message:
-      'In total, ${_person.person} has spent ${prettifyAmount(_person.sumExpenses)}',
+          'In total, ${_person.person} has spent ${prettifyAmount(_person.sumExpenses)}',
     );
   }
 }

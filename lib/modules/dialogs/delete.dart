@@ -12,7 +12,9 @@ class DeleteDialog extends StatefulWidget {
   final Expense expense;
   List<Person> persons = [];
 
-  DeleteDialog({Expense expense, List<Person> persons}) : this.expense = expense, this.persons = persons;
+  DeleteDialog({Expense expense, List<Person> persons})
+      : this.expense = expense,
+        this.persons = persons;
 
   @override
   _DeleteDialogState createState() => new _DeleteDialogState(expense, persons);
@@ -22,7 +24,9 @@ class _DeleteDialogState extends State<DeleteDialog> {
   final Expense expense;
   List<Person> persons = [];
 
-  _DeleteDialogState(Expense expense, List<Person> persons) : this.expense = expense, this.persons = persons;
+  _DeleteDialogState(Expense expense, List<Person> persons)
+      : this.expense = expense,
+        this.persons = persons;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
                 .doc(expense.id)
                 .delete()
                 .catchError((e) => log(
-                'Could not delete entry from Firebase collection. ${expense.toString()}'));
+                    'Could not delete entry from Firebase collection. ${expense.toString()}'));
           },
           child: Text('Delete'),
         ),

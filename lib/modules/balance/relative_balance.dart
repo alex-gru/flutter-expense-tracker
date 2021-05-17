@@ -10,8 +10,14 @@ class RelativeBalance extends StatelessWidget {
   final align.Align _align;
 
   const RelativeBalance({
-    Key key, Person person, List<Person> persons, align.Align alignPercentage,
-  }) : _person = person, _persons = persons, _align = alignPercentage, super(key: key);
+    Key key,
+    Person person,
+    List<Person> persons,
+    align.Align alignPercentage,
+  })  : _person = person,
+        _persons = persons,
+        _align = alignPercentage,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,7 @@ class RelativeBalance extends StatelessWidget {
     );
   }
 
-  AlignmentDirectional getAlignment() =>
-      _align == align.Align.START
-          ? AlignmentDirectional.centerStart
-          : AlignmentDirectional.centerEnd;
+  AlignmentDirectional getAlignment() => _align == align.Align.START
+      ? AlignmentDirectional.centerStart
+      : AlignmentDirectional.centerEnd;
 }

@@ -29,11 +29,11 @@ class _AddDialogState extends State<AddDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     SharedPreferences.getInstance().then((sharedPref) {
       setState(() {
         // choose previously selected person
-        _person = sharedPref.getString(PREF_PERSON) ?? persons.elementAt(0).person;
+        _person =
+            sharedPref.getString(PREF_PERSON) ?? persons.elementAt(0).person;
       });
     });
 
@@ -53,12 +53,15 @@ class _AddDialogState extends State<AddDialog> {
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                 ),
                 onChanged: (String newValue) {
-                  SharedPreferences.getInstance().then((sharedPref) => sharedPref.setString(PREF_PERSON, _person));
+                  SharedPreferences.getInstance().then((sharedPref) =>
+                      sharedPref.setString(PREF_PERSON, _person));
                   setState(() {
                     _person = newValue;
                   });
                 },
-                items: persons.map((e) => e.person).map<DropdownMenuItem<String>>((String value) {
+                items: persons
+                    .map((e) => e.person)
+                    .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Row(
@@ -82,7 +85,8 @@ class _AddDialogState extends State<AddDialog> {
                 padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                 child: ConstrainedBox(
                   child: TextField(
-                    onChanged: (value) => setState(() => _amount = double.tryParse(value)),
+                    onChanged: (value) =>
+                        setState(() => _amount = double.tryParse(value)),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'e.g. 23.94',
@@ -126,21 +130,23 @@ class _AddDialogState extends State<AddDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _amount == null || _text == null || _text.isEmpty ? null : () {
-            var _expense =
-            Expense.create(_person, _amount, Timestamp.now(), _text);
-            FirebaseFirestore.instance
-                .collection('expenses')
-                .add({
-              'person': _expense.person,
-              'value': _expense.value,
-              'when': _expense.when,
-              'text': _expense.text
-            })
-                .then((value) => Navigator.pop(context, RESULT.ADDED))
-                .catchError((e) => log(
-                'Could not add new expense to Firebase collection. ${_expense.toString()}'));
-          },
+          onPressed: _amount == null || _text == null || _text.isEmpty
+              ? null
+              : () {
+                  var _expense =
+                      Expense.create(_person, _amount, Timestamp.now(), _text);
+                  FirebaseFirestore.instance
+                      .collection('expenses')
+                      .add({
+                        'person': _expense.person,
+                        'value': _expense.value,
+                        'when': _expense.when,
+                        'text': _expense.text
+                      })
+                      .then((value) => Navigator.pop(context, RESULT.ADDED))
+                      .catchError((e) => log(
+                          'Could not add new expense to Firebase collection. ${_expense.toString()}'));
+                },
           child: Text('Add'),
         ),
         TextButton(

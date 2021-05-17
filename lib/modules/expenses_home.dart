@@ -43,17 +43,22 @@ class _ExpensesHomeState extends State<ExpensesHome> {
         actions: [
           Tooltip(
             message: 'Toggle Dark Mode',
-            child: IconButton(icon: Icon(Icons.nightlight_round), onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              setState(() async {
-                prefs.setBool(PREF_DARK_MODE, !(prefs.getBool(PREF_DARK_MODE) ?? false));
-                await FlutterRestart.restartApp();
-              });
-            }),
+            child: IconButton(
+                icon: Icon(Icons.nightlight_round),
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  setState(() async {
+                    prefs.setBool(PREF_DARK_MODE,
+                        !(prefs.getBool(PREF_DARK_MODE) ?? false));
+                    await FlutterRestart.restartApp();
+                  });
+                }),
           ),
           Tooltip(
               message: 'Refresh',
-              child: IconButton(icon: Icon(Icons.refresh), onPressed: () => queryExpenses(true))),
+              child: IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () => queryExpenses(true))),
         ],
       ),
       body: AnimatedOpacity(
@@ -68,10 +73,16 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                   padding: const EdgeInsets.all(12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: _persons.isEmpty ? [] : [
-                      TotalBalance(person: _persons.elementAt(0), persons: _persons),
-                      TotalBalance(person: _persons.elementAt(1), persons: _persons),
-                    ],
+                    children: _persons.isEmpty
+                        ? []
+                        : [
+                            TotalBalance(
+                                person: _persons.elementAt(0),
+                                persons: _persons),
+                            TotalBalance(
+                                person: _persons.elementAt(1),
+                                persons: _persons),
+                          ],
                   ),
                 ),
                 flex: 6,
@@ -80,16 +91,18 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                 Container(
                     height: relativeBalanceBarHeight,
                     child: Row(
-                      children: _persons.isEmpty ? [] : [
-                        RelativeBalance(
-                            person: _persons.elementAt(0),
-                            persons: _persons,
-                            alignPercentage: align.Align.START),
-                        RelativeBalance(
-                            person: _persons.elementAt(1),
-                            persons: _persons,
-                            alignPercentage: align.Align.END),
-                      ],
+                      children: _persons.isEmpty
+                          ? []
+                          : [
+                              RelativeBalance(
+                                  person: _persons.elementAt(0),
+                                  persons: _persons,
+                                  alignPercentage: align.Align.START),
+                              RelativeBalance(
+                                  person: _persons.elementAt(1),
+                                  persons: _persons,
+                                  alignPercentage: align.Align.END),
+                            ],
                     )),
                 Container(
                   width: 5,
@@ -102,13 +115,15 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                       height: 400,
                       child: _expenses.isEmpty
                           ? Center(
-                          child: Text(
-                              'Pretty empty here. Use the button to add expenses.',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w300)))
+                              child: Text(
+                                  'Pretty empty here. Use the button to add expenses.',
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w300)))
                           : ExpenseListView(
-                          expenses: _expenses, callback: () => queryExpenses(false), persons: _persons)),
+                              expenses: _expenses,
+                              callback: () => queryExpenses(false),
+                              persons: _persons)),
                   flex: 30),
             ],
           ),
@@ -116,9 +131,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (_) => AddDialog(_persons))
+          showDialog(context: context, builder: (_) => AddDialog(_persons))
               .then((value) {
             if (value == RESULT.ADDED) {
               queryExpenses(false);
@@ -146,7 +159,9 @@ class _ExpensesHomeState extends State<ExpensesHome> {
     Query query = FirebaseFirestore.instance.collection('expenses');
     return query
         .where('person', whereIn: _persons.map((e) => e.person).toList())
-        .orderBy('when', descending: true).get().then((querySnapshot) async {
+        .orderBy('when', descending: true)
+        .get()
+        .then((querySnapshot) async {
       setState(() {
         _expenses.clear();
         querySnapshot.docs.forEach((document) {
@@ -177,5 +192,4 @@ class _ExpensesHomeState extends State<ExpensesHome> {
       });
     });
   }
-
 }

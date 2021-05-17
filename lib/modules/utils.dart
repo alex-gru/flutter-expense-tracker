@@ -20,7 +20,7 @@ String prettifyAmount(double amount) =>
     amount == 0 ? '€ 0' : '€ ${amountFormatter.format(amount)}';
 
 String prettifyShare(double share) =>
-    share == 0 ? ' 0.0%' : ' ${shareFormatter.format(share*100)}% ';
+    share == 0 ? ' 0.0%' : ' ${shareFormatter.format(share * 100)}% ';
 
 String niceDate(Timestamp timestamp) {
   // https://stackoverflow.com/a/54391552/2472398
@@ -52,7 +52,8 @@ double calcSum(person, expenses) {
           .reduce((value, element) => value + element);
 }
 
-void calcBalance(List<Person> persons, List<Expense> expenses, BuildContext context) {
+void calcBalance(
+    List<Person> persons, List<Expense> expenses, BuildContext context) {
   var _person0 = persons.elementAt(0).person;
   var _person1 = persons.elementAt(1).person;
 

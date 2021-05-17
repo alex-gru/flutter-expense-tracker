@@ -20,7 +20,8 @@ class Expense {
     return 'Expense{id: $id, person: $person, value: $value, when: $when, text: $text}';
   }
 
-  static create(String person, double amount, Timestamp timestamp, String text) {
+  static create(
+      String person, double amount, Timestamp timestamp, String text) {
     return Expense('placeholderId', person, amount, timestamp, text);
   }
 }

@@ -11,17 +11,24 @@ class ExpenseListView extends StatefulWidget {
   final List<Person> persons;
   final void Function() callback;
 
-  ExpenseListView({List<Expense> expenses, Function callback, List<Person> persons}) : this.expenses = expenses, this.callback = callback, this.persons = persons;
+  ExpenseListView(
+      {List<Expense> expenses, Function callback, List<Person> persons})
+      : this.expenses = expenses,
+        this.callback = callback,
+        this.persons = persons;
 
   @override
-  _ExpenseListViewState createState() => new _ExpenseListViewState(expenses, persons);
+  _ExpenseListViewState createState() =>
+      new _ExpenseListViewState(expenses, persons);
 }
 
 class _ExpenseListViewState extends State<ExpenseListView> {
   final List<Expense> expenses;
   final List<Person> persons;
 
-  _ExpenseListViewState(List<Expense> expenses, List<Person> persons) : this.expenses = expenses, this.persons = persons;
+  _ExpenseListViewState(List<Expense> expenses, List<Person> persons)
+      : this.expenses = expenses,
+        this.persons = persons;
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +74,7 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                             context: context,
                             builder: (_) => DeleteDialog(
                                 expense: expenses[i],
-                                persons: persons
-                                )).then((value) {
+                                persons: persons)).then((value) {
                           if (value == RESULT.DELETED) {
                             this.widget.callback();
                           }
