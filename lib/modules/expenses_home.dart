@@ -9,6 +9,7 @@ import 'package:flutter_expense_tracker/modules/balance/align.dart' as align;
 import 'package:flutter_restart/flutter_restart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'balance/behind-marker.dart';
 import 'dialogs/add.dart';
 import 'dialogs/dialog_result.dart';
 import 'expense.dart';
@@ -31,6 +32,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
 
   @override
   void initState() {
+    super.initState();
     queryPersons().then((value) => queryExpenses(true));
   }
 
@@ -87,29 +89,37 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                 ),
                 flex: 6,
               ),
-              Stack(alignment: AlignmentDirectional.center, children: [
-                Container(
-                    height: relativeBalanceBarHeight,
-                    child: Row(
-                      children: _persons.isEmpty
-                          ? []
-                          : [
-                              RelativeBalance(
-                                  person: _persons.elementAt(0),
-                                  persons: _persons,
-                                  alignPercentage: align.Align.START),
-                              RelativeBalance(
-                                  person: _persons.elementAt(1),
-                                  persons: _persons,
-                                  alignPercentage: align.Align.END),
-                            ],
-                    )),
-                Container(
-                  width: 5,
-                  height: relativeBalanceBarHeight + 10,
-                  color: Theme.of(context).accentColor,
-                )
-              ]),
+              Expanded(
+                child: Stack(
+                    alignment: AlignmentDirectional.centerStart,
+                    children: [
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                        Container(
+                            height: relativeBalanceBarHeight,
+                            child: Row(
+                              children: _persons.isEmpty
+                                  ? []
+                                  : [
+                                      RelativeBalance(
+                                          person: _persons.elementAt(0),
+                                          persons: _persons,
+                                          alignPercentage: align.Align.START),
+                                      RelativeBalance(
+                                          person: _persons.elementAt(1),
+                                          persons: _persons,
+                                          alignPercentage: align.Align.END),
+                                    ],
+                            )),
+                        Container(
+                          width: 5,
+                          height: relativeBalanceBarHeight + 10,
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ]),
+                      BehindMarker(persons: _persons)
+                    ]),
+                flex: 6,
+              ),
               Expanded(
                   child: Container(
                       height: 400,

@@ -10,7 +10,7 @@ import '../utils.dart';
 
 class DeleteDialog extends StatefulWidget {
   final Expense expense;
-  List<Person> persons = [];
+  final List<Person> persons;
 
   DeleteDialog({Expense expense, List<Person> persons})
       : this.expense = expense,

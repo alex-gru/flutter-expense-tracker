@@ -17,7 +17,10 @@ Color getPersonColor(String person, List<Person> persons) {
 }
 
 String prettifyAmount(double amount) =>
-    amount == 0 ? '€ 0' : '€ ${amountFormatter.format(amount)}';
+    '€ ${prettifyAmountWithoutCurrency(amount)}';
+
+String prettifyAmountWithoutCurrency(double amount) =>
+    amount == 0 ? '0' : '${amountFormatter.format(amount)}';
 
 String prettifyShare(double share) =>
     share == 0 ? ' 0.0%' : ' ${shareFormatter.format(share * 100)}% ';

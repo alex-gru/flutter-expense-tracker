@@ -11,7 +11,7 @@ import '../expense.dart';
 import '../utils.dart';
 
 class AddDialog extends StatefulWidget {
-  List<Person> persons = [];
+  final List<Person> persons;
 
   AddDialog(List<Person> persons) : this.persons = persons;
 
