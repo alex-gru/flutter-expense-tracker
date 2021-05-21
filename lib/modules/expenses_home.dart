@@ -10,7 +10,6 @@ import 'package:flutter_restart/flutter_restart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'marker/behind_marker_static.dart';
-import 'marker/behind_marker_relative.dart';
 import 'dialogs/add.dart';
 import 'dialogs/dialog_result.dart';
 import 'expense.dart';
@@ -41,115 +40,128 @@ class _ExpensesHomeState extends State<ExpensesHome> {
   Widget build(BuildContext context) {
     const double relativeBalanceBarHeight = 20;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          Tooltip(
-            message: 'Toggle Dark Mode',
-            child: IconButton(
-                icon: Icon(Icons.nightlight_round),
-                onPressed: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  setState(() async {
-                    prefs.setBool(PREF_DARK_MODE,
-                        !(prefs.getBool(PREF_DARK_MODE) ?? false));
-                    await FlutterRestart.restartApp();
-                  });
-                }),
-          ),
-          Tooltip(
-              message: 'Refresh',
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: [
+            Tooltip(
+              message: 'Toggle Dark Mode',
               child: IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: () => queryExpenses(true))),
-        ],
-      ),
-      body: AnimatedOpacity(
-        opacity: _loading ? 0.8 : 1,
-        duration: Duration(milliseconds: 100),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: _persons.isEmpty
-                      ? []
-                      : [
-                          TotalBalance(
-                              person: _persons.elementAt(0),
-                              persons: _persons),
-                          TotalBalance(
-                              person: _persons.elementAt(1),
-                              persons: _persons),
-                        ],
-                ),
-                flex: 6,
-              ),
-              Expanded(
-                child: Stack(
-                    alignment: AlignmentDirectional.centerStart,
-                    children: [
-                      Stack(alignment: AlignmentDirectional.center, children: [
-                        Container(
-                            height: relativeBalanceBarHeight,
-                            child: Row(
-                              children: _persons.isEmpty
-                                  ? []
-                                  : [
-                                      RelativeBalance(
-                                          person: _persons.elementAt(0),
-                                          persons: _persons,
-                                          alignPercentage: align.Align.START),
-                                      RelativeBalance(
-                                          person: _persons.elementAt(1),
-                                          persons: _persons,
-                                          alignPercentage: align.Align.END),
-                                    ],
-                            )),
-                        Container(
-                          width: 5,
-                          height: relativeBalanceBarHeight + 10,
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ]),
-                      BehindMarkerStatic(persons: _persons),
-                    ]),
-                flex: 6,
-              ),
-              Expanded(
-                  child: Container(
-                      height: 400,
-                      child: _expenses.isEmpty
-                          ? Center(
-                              child: Text(
-                                  'Pretty empty here. Use the button to add expenses.',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w300)))
-                          : ExpenseListView(
-                              expenses: _expenses,
-                              callback: () => queryExpenses(false),
-                              persons: _persons)),
-                  flex: 30),
-            ],
-          ),
+                  icon: Icon(Icons.nightlight_round),
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    setState(() async {
+                      prefs.setBool(PREF_DARK_MODE,
+                          !(prefs.getBool(PREF_DARK_MODE) ?? false));
+                      await FlutterRestart.restartApp();
+                    });
+                  }),
+            ),
+            Tooltip(
+                message: 'Refresh',
+                child: IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () => queryExpenses(true))),
+          ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(context: context, builder: (_) => AddDialog(_persons))
-              .then((value) {
-            if (value == RESULT.ADDED) {
-              queryExpenses(false);
-            }
-            return null;
-          });
-        },
-        tooltip: 'Add Expense',
-        child: Icon(Icons.add),
-      ),
+        body: AnimatedOpacity(
+          opacity: _loading ? 0.8 : 1,
+          duration: Duration(milliseconds: 100),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: _persons.isEmpty
+                        ? []
+                            : [
+                    TotalBalance(
+                    person: _persons.elementAt(0),
+                    persons: _persons),
+                TotalBalance(
+                    person: _persons.elementAt(1),
+                    persons: _persons),
+              ],
+            ),
+            flex: 6,
+          ),
+          Expanded(
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                Stack(alignment: AlignmentDirectional.center, children: [
+                Container(
+                    height: relativeBalanceBarHeight,
+                    child: Row(
+                        children: _persons.isEmpty
+                        ? []
+                            : [
+                    RelativeBalance(
+                    person: _persons.elementAt(0),
+                    persons: _persons,
+                    alignPercentage: align.Align.START),
+                RelativeBalance(
+                    person: _persons.elementAt(1),
+                    persons: _persons,
+                    alignPercentage: align.Align.END),
+              ],
+              )),
+          Stack(
+              alignment: AlignmentDirectional.center,
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                    top: 30,
+                    child: Text(
+                      "50%",
+                      style: Theme.of(context).textTheme.caption,
+                    )
+                ),
+                Container(
+                  width: 5,
+                  height: relativeBalanceBarHeight + 10,
+                  color: Theme
+                      .of(context)
+                      .accentColor,
+                  child: Container(),
+                )
+              ]),
+        ]),
+    BehindMarkerStatic(persons: _persons),
+    ]),
+    flex: 6,
+    ),
+    Expanded(
+    child: _expenses.isEmpty
+    ? Center(
+    child: Text(
+    'Pretty empty here. Use the button to add expenses.',
+    style: TextStyle(
+    color: Colors.grey,
+    fontWeight: FontWeight.w300)))
+        : ExpenseListView(
+    expenses: _expenses,
+    callback: () => queryExpenses(false),
+    persons: _persons),
+    flex: 30),
+    ],
+    ),
+    ),
+    ),
+    floatingActionButton: FloatingActionButton(
+    onPressed: () {
+    showDialog(context: context, builder: (_) => AddDialog(_persons))
+        .then((value) {
+    if (value == RESULT.ADDED) {
+    queryExpenses(false);
+    }
+    return null;
+    });
+    },
+    tooltip: 'Add Expense',
+    child: Icon(Icons.add),
+    ),
     );
   }
 
@@ -158,9 +170,16 @@ class _ExpensesHomeState extends State<ExpensesHome> {
     setState(() {
       _loading = true;
       if (animateFromCenter) {
-        double width = MediaQuery.of(context).size.width;
-        _persons.elementAt(0).progress = 0.5 * width;
-        _persons.elementAt(1).progress = 0.5 * width;
+        double width = MediaQuery
+            .of(context)
+            .size
+            .width;
+        _persons
+            .elementAt(0)
+            .progress = 0.5 * width;
+        _persons
+            .elementAt(1)
+            .progress = 0.5 * width;
       }
     });
 
