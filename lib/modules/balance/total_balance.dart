@@ -44,7 +44,6 @@ class TotalBalance extends StatelessWidget {
               children: [
                 Text(
                   prettifyAmount(_person.sumExpenses),
-                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ],
             ),

@@ -40,48 +40,72 @@ class _ExpenseListViewState extends State<ExpenseListView> {
             children: [
               ListTile(
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Text(prettifyAmount(expenses[i].value)),
-                      flex: 3,
+                      child: Tooltip(
+                        child: Icon(
+                          Icons.account_circle,
+                          color: getPersonColor(expenses[i].person, persons),
+                        ),
+                        message: expenses[i].person,
+                      ),
+                      flex: 1
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              prettifyAmount(expenses[i].value),
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                              child: Text(
+                                expenses[i].text,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      flex: 4,
                     ),
                     Expanded(
                         child: Tooltip(
-                          child: Text(niceDate(expenses[i].when)),
+                          child: Text(
+                            niceDate(expenses[i].when),
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
                           message: shortDate(expenses[i].when),
                         ),
                         flex: 2),
+                    Expanded(
+                      child: Tooltip(
+                        child: IconButton(
+                            icon: new Icon(Icons.remove_circle_outline_outlined,
+                                color: Color(0xFF525252)),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => DeleteDialog(
+                                      expense: expenses[i],
+                                      persons: persons)).then((value) {
+                                if (value == RESULT.DELETED) {
+                                  this.widget.callback();
+                                }
+                                return null;
+                              });
+                            }),
+                        message: 'Delete',
+                      ),
+                      flex: 1
+                    )
                   ],
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                  child: Text(expenses[i].text),
-                ),
-                leading: Tooltip(
-                  child: Icon(
-                    Icons.account_circle,
-                    color: getPersonColor(expenses[i].person, persons),
-                  ),
-                  message: expenses[i].person,
-                ),
-                trailing: Tooltip(
-                  child: IconButton(
-                      icon: new Icon(Icons.remove_circle_outline_outlined,
-                          color: Color(0xFF525252)),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => DeleteDialog(
-                                expense: expenses[i],
-                                persons: persons)).then((value) {
-                          if (value == RESULT.DELETED) {
-                            this.widget.callback();
-                          }
-                          return null;
-                        });
-                      }),
-                  message: 'Delete',
                 ),
               ),
               Divider()
