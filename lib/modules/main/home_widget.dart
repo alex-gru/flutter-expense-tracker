@@ -68,10 +68,16 @@ class _HomeWidgetState extends State<HomeWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                  child: BalanceWidget(persons: _persons, relativeBalanceBarHeight: relativeBalanceBarHeight),
+                  child: BalanceWidget(
+                      persons: _persons,
+                      relativeBalanceBarHeight: relativeBalanceBarHeight),
                   flex: 28),
               Expanded(
-                  child: ExpensesListWidget(persons: _persons, expenses: _expenses, callback: () => queryExpenses(false),),
+                  child: ExpensesListWidget(
+                    persons: _persons,
+                    expenses: _expenses,
+                    callback: () => queryExpenses(false),
+                  ),
                   flex: 72),
             ],
           ),

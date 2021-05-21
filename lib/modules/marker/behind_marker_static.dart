@@ -29,20 +29,21 @@ class BehindMarkerStatic extends StatelessWidget {
     double _middle = (_personBehind.progress + _personLeading.progress) / 2;
 
     var _left = _persons.elementAt(0).progress < _middle
-        ? (_middle - _middle/2)
-        : (_middle + _middle/2);
+        ? (_middle - _middle / 2)
+        : (_middle + _middle / 2);
 
-    var _diff = (_personLeading.sumExpenses + _personBehind.sumExpenses) / 2 - _personBehind.sumExpenses;
+    var _diff = (_personLeading.sumExpenses + _personBehind.sumExpenses) / 2 -
+        _personBehind.sumExpenses;
 
     if (_diff == 0) return Container();
 
     log('_middle: $_middle, _left: $_left');
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(_left - _markerWidth/2, 16, 0, 0),
+      padding: EdgeInsets.fromLTRB(_left - _markerWidth / 2, 16, 0, 0),
       child: Tooltip(
-          message: '${_personBehind.person} is ${prettifyAmount(_diff)} behind.',
-          child: Stack(
+        message: '${_personBehind.person} is ${prettifyAmount(_diff)} behind.',
+        child: Stack(
           alignment: AlignmentDirectional.center,
           children: [
             ClipRRect(
@@ -50,10 +51,10 @@ class BehindMarkerStatic extends StatelessWidget {
                 width: _markerWidth,
                 height: _markerHeight,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                      color: getPersonColor(_personBehind.person, _persons),
-                      width: 2,
-                    ),
+                  border: Border.all(
+                    color: getPersonColor(_personBehind.person, _persons),
+                    width: 2,
+                  ),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
