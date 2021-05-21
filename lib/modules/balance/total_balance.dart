@@ -21,29 +21,30 @@ class TotalBalance extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Row(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                child: Icon(
+                  Icons.account_circle,
+                  color: getPersonColor(_person.person, _persons),
+                ),
+              ),
               Text(
-                prettifyAmount(_person.sumExpenses),
-                style: Theme.of(context).textTheme.headline5,
+                _person.person,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                  child: Icon(
-                    Icons.account_circle,
-                    color: getPersonColor(_person.person, _persons),
-                  ),
-                ),
                 Text(
-                  _person.person,
-                  style: Theme.of(context).textTheme.subtitle2,
+                  prettifyAmount(_person.sumExpenses),
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ],
             ),

@@ -12,8 +12,8 @@ const PREF_PERSON = 'selectedPerson';
 
 Color getPersonColor(String person, List<Person> persons) {
   return persons.indexWhere((p) => p.person == person) == 0
-      ? Colors.teal
-      : Colors.deepOrangeAccent;
+      ? Colors.green.shade600
+      : Colors.orange.shade800;
 }
 
 String prettifyAmount(double amount) =>

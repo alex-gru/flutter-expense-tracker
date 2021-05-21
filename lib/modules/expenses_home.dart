@@ -9,7 +9,8 @@ import 'package:flutter_expense_tracker/modules/balance/align.dart' as align;
 import 'package:flutter_restart/flutter_restart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'balance/behind-marker.dart';
+import 'marker/behind_marker_static.dart';
+import 'marker/behind_marker_relative.dart';
 import 'dialogs/add.dart';
 import 'dialogs/dialog_result.dart';
 import 'expense.dart';
@@ -71,21 +72,18 @@ class _ExpensesHomeState extends State<ExpensesHome> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: _persons.isEmpty
-                        ? []
-                        : [
-                            TotalBalance(
-                                person: _persons.elementAt(0),
-                                persons: _persons),
-                            TotalBalance(
-                                person: _persons.elementAt(1),
-                                persons: _persons),
-                          ],
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: _persons.isEmpty
+                      ? []
+                      : [
+                          TotalBalance(
+                              person: _persons.elementAt(0),
+                              persons: _persons),
+                          TotalBalance(
+                              person: _persons.elementAt(1),
+                              persons: _persons),
+                        ],
                 ),
                 flex: 6,
               ),
@@ -116,7 +114,7 @@ class _ExpensesHomeState extends State<ExpensesHome> {
                           color: Theme.of(context).accentColor,
                         ),
                       ]),
-                      BehindMarker(persons: _persons)
+                      BehindMarkerStatic(persons: _persons),
                     ]),
                 flex: 6,
               ),

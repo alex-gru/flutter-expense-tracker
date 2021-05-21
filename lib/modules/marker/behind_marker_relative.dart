@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import '../person.dart';
 import '../utils.dart';
 
-class BehindMarker extends StatelessWidget {
-  const BehindMarker({
+class BehindMarkerRelative extends StatelessWidget {
+  final double _markerWidth = 100;
+
+  const BehindMarkerRelative({
     Key key,
     @required List<Person> persons,
   })  : _persons = persons,
@@ -26,7 +28,7 @@ class BehindMarker extends StatelessWidget {
     var _diff = (_personLeading.sumExpenses + _personBehind.sumExpenses) / 2 - _personBehind.sumExpenses;
 
     return Positioned(
-      left: _persons.elementAt(0).progress - 80 / 2,
+      left: _persons.elementAt(0).progress - _markerWidth / 2,
       bottom: 60,
       child: Stack(
         alignment: AlignmentDirectional.center,
@@ -34,12 +36,12 @@ class BehindMarker extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: Container(
-              width: 80,
+              width: _markerWidth,
               height: 20,
               color: getPersonColor(_personBehind.person, _persons),
             ),
           ),
-          Text('- ${prettifyAmountWithoutCurrency(_diff)}')
+          Text('${prettifyAmount(_diff)} behind')
         ],
       ),
     );
