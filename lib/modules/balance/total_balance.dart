@@ -23,6 +23,17 @@ class TotalBalance extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+            child: Row(
+              children: [
+                Text(
+                  prettifyAmount(_person.sumExpenses),
+                ),
+              ],
+            ),
+          ),
+          Divider(),
           Row(
             children: [
               Padding(
@@ -37,16 +48,6 @@ class TotalBalance extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6,
               ),
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-            child: Row(
-              children: [
-                Text(
-                  prettifyAmount(_person.sumExpenses),
-                ),
-              ],
-            ),
           ),
         ],
       ),
