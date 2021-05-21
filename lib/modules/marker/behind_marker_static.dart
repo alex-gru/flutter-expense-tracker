@@ -47,7 +47,6 @@ class BehindMarkerStatic extends StatelessWidget {
           alignment: AlignmentDirectional.center,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(4),
               child: Container(
                 width: _markerWidth,
                 height: _markerHeight,
@@ -55,7 +54,9 @@ class BehindMarkerStatic extends StatelessWidget {
                     border: Border.all(
                       color: getPersonColor(_personBehind.person, _persons),
                       width: 2,
-                    )),
+                    ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             ),
             Text('- ${prettifyAmount(_diff)}')
