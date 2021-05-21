@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../person.dart';
+import '../dto/person.dart';
 import 'dialog_result.dart';
-import '../expense.dart';
-import '../utils.dart';
+import '../dto/expense.dart';
+import '../utils/utils.dart';
 
 class AddDialog extends StatefulWidget {
   final List<Person> persons;

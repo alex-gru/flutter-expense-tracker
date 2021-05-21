@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/modules/person.dart';
-import 'package:flutter_expense_tracker/modules/utils.dart';
+import 'package:flutter_expense_tracker/modules/dto/person.dart';
+import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 
-import 'dialogs/delete.dart';
-import 'dialogs/dialog_result.dart';
-import 'expense.dart';
+import '../dialogs/delete.dart';
+import '../dialogs/dialog_result.dart';
+import '../dto/expense.dart';
 
 class ExpenseListView extends StatefulWidget {
   final List<Expense> expenses;
@@ -34,7 +34,7 @@ class _ExpenseListViewState extends State<ExpenseListView> {
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: expenses.length,
-        padding: EdgeInsets.all(4.0),
+        padding: EdgeInsets.all(0),
         itemBuilder: (context, i) {
           return Column(
             children: [

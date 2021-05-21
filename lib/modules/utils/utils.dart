@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/modules/expense.dart';
-import 'package:flutter_expense_tracker/modules/person.dart';
+import 'package:flutter_expense_tracker/modules/dto/expense.dart';
+import 'package:flutter_expense_tracker/modules/dto/person.dart';
 import 'package:intl/intl.dart';
 
 final amountFormatter = NumberFormat("#,###.00#");

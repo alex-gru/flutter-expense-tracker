@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'modules/expenses_home.dart';
-import 'modules/utils.dart';
+import 'modules/main/home_widget.dart';
+import 'modules/utils/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,7 @@ class _ExpensesAppState extends State<ExpensesApp> {
         brightness: widget.darkMode ? Brightness.dark : Brightness.light,
       ),
       themeMode: widget.darkMode ? ThemeMode.dark : ThemeMode.light,
-      home: ExpensesHome(title: title),
+      home: HomeWidget(title: title),
     );
   }
 }

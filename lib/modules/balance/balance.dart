@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/balance/align.dart' as align;
-import 'package:flutter_expense_tracker/modules/utils.dart';
+import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 
-import '../person.dart';
+import '../dto/person.dart';
 
-class RelativeBalance extends StatelessWidget {
+class Balance extends StatelessWidget {
   final Person _person;
   final List<Person> _persons;
   final align.Align _align;
 
-  const RelativeBalance({
+  const Balance({
     Key key,
     Person person,
     List<Person> persons,

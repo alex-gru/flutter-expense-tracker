@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../person.dart';
+import '../dto/person.dart';
 import 'dialog_result.dart';
-import '../expense.dart';
-import '../utils.dart';
+import '../dto/expense.dart';
+import '../utils/utils.dart';
 
 class DeleteDialog extends StatefulWidget {
   final Expense expense;

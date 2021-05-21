@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/modules/dto/person.dart';
 
-import '../person.dart';
-import '../utils.dart';
+import '../utils/utils.dart';
 
 class BehindMarkerStatic extends StatelessWidget {
   final double _markerWidth = 100;
@@ -38,9 +38,8 @@ class BehindMarkerStatic extends StatelessWidget {
 
     log('_middle: $_middle, _left: $_left');
 
-    return Positioned(
-      left: _left - _markerWidth/2,
-      bottom: 60,
+    return Padding(
+      padding: EdgeInsets.fromLTRB(_left - _markerWidth/2, 16, 0, 0),
       child: Tooltip(
           message: '${_personBehind.person} is ${prettifyAmount(_diff)} behind.',
           child: Stack(

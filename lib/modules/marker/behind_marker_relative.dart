@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/modules/dto/person.dart';
 
-import '../person.dart';
-import '../utils.dart';
+import '../utils/utils.dart';
 
 class BehindMarkerRelative extends StatelessWidget {
   final double _markerWidth = 100;
