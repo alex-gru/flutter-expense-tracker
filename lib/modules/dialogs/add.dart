@@ -3,37 +3,34 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../dto/person.dart';
-import 'dialog_result.dart';
 import '../dto/expense.dart';
 import '../utils/utils.dart';
+import 'dialog_result.dart';
 
 class AddDialog extends StatefulWidget {
-  final List<Person> persons;
-
-  AddDialog(List<Person> persons) : this.persons = persons;
+  AddDialog() : super();
 
   @override
-  _AddDialogState createState() => new _AddDialogState(persons);
+  _AddDialogState createState() => new _AddDialogState();
 }
 
 class _AddDialogState extends State<AddDialog> {
-  List<Person> persons = [];
   String _person;
   double _amount;
   String _text;
 
-  _AddDialogState(List<Person> persons) : this.persons = persons;
+  _AddDialogState() : super();
 
   @override
   Widget build(BuildContext context) {
     SharedPreferences.getInstance().then((sharedPref) {
       setState(() {
         // choose previously selected person
-        _person =
-            sharedPref.getString(PREF_PERSON) ?? persons.elementAt(0).person;
+        _person = sharedPref.getString(PREF_PERSON) ??
+            AppStateScope.of(context).persons.elementAt(0).person;
       });
     });
 
@@ -59,7 +56,8 @@ class _AddDialogState extends State<AddDialog> {
                     _person = newValue;
                   });
                 },
-                items: persons
+                items: AppStateScope.of(context)
+                    .persons
                     .map((e) => e.person)
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -70,7 +68,7 @@ class _AddDialogState extends State<AddDialog> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
                           child: Icon(
                             Icons.account_circle,
-                            color: getPersonColor(value, persons),
+                            color: getPersonColor(value, context),
                           ),
                         ),
                         Text(

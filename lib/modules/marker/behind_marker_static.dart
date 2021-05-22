@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/modules/dto/person.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 
 import '../utils/utils.dart';
 
@@ -12,32 +12,29 @@ class BehindMarkerStatic extends StatelessWidget {
 
   const BehindMarkerStatic({
     Key key,
-    @required List<Person> persons,
-  })  : _persons = persons,
-        super(key: key);
-
-  final List<Person> _persons;
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (_persons.isEmpty) return Container();
-    var _personBehind = _persons
+    if (AppStateScope.of(context).persons.isEmpty) return Container();
+    var _personBehind = AppStateScope.of(context)
+        .persons
         .reduce((person, other) => person.share < other.share ? person : other);
-    var _personLeading = _persons
+    var _personLeading = AppStateScope.of(context)
+        .persons
         .reduce((person, other) => person.share > other.share ? person : other);
 
     double _middle = (_personBehind.progress + _personLeading.progress) / 2;
 
-    var _left = _persons.elementAt(0).progress < _middle
-        ? (_middle - _middle / 2)
-        : (_middle + _middle / 2);
+    var _left =
+        AppStateScope.of(context).persons.elementAt(0).progress < _middle
+            ? (_middle - _middle / 2)
+            : (_middle + _middle / 2);
 
     var _diff = (_personLeading.sumExpenses + _personBehind.sumExpenses) / 2 -
         _personBehind.sumExpenses;
 
     if (_diff == 0) return Container();
-
-    log('_middle: $_middle, _left: $_left');
 
     return Padding(
       padding: EdgeInsets.fromLTRB(_left - _markerWidth / 2, 16, 0, 0),
@@ -52,7 +49,7 @@ class BehindMarkerStatic extends StatelessWidget {
                 height: _markerHeight,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: getPersonColor(_personBehind.person, _persons),
+                    color: getPersonColor(_personBehind.person, context),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(20),

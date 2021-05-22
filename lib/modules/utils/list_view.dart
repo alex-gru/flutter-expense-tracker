@@ -1,39 +1,28 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/modules/dto/person.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 
 import '../dialogs/delete.dart';
 import '../dialogs/dialog_result.dart';
-import '../dto/expense.dart';
 
 class ExpenseListView extends StatefulWidget {
-  final List<Expense> expenses;
-  final List<Person> persons;
   final void Function() callback;
 
-  ExpenseListView(
-      {List<Expense> expenses, Function callback, List<Person> persons})
-      : this.expenses = expenses,
-        this.callback = callback,
-        this.persons = persons;
+  ExpenseListView({Function callback}) : this.callback = callback;
 
   @override
-  _ExpenseListViewState createState() =>
-      new _ExpenseListViewState(expenses, persons);
+  _ExpenseListViewState createState() => new _ExpenseListViewState();
 }
 
 class _ExpenseListViewState extends State<ExpenseListView> {
-  final List<Expense> expenses;
-  final List<Person> persons;
-
-  _ExpenseListViewState(List<Expense> expenses, List<Person> persons)
-      : this.expenses = expenses,
-        this.persons = persons;
+  _ExpenseListViewState() : super();
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: expenses.length,
+        itemCount: AppStateScope.of(context).expenses.length,
         padding: EdgeInsets.all(0),
         itemBuilder: (context, i) {
           return Column(
@@ -46,9 +35,11 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                         child: Tooltip(
                           child: Icon(
                             Icons.account_circle,
-                            color: getPersonColor(expenses[i].person, persons),
+                            color: getPersonColor(
+                                AppStateScope.of(context).expenses[i].person,
+                                context),
                           ),
-                          message: expenses[i].person,
+                          message: AppStateScope.of(context).expenses[i].person,
                         ),
                         flex: 1),
                     Expanded(
@@ -59,13 +50,14 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              prettifyAmount(expenses[i].value),
+                              prettifyAmount(
+                                  AppStateScope.of(context).expenses[i].value),
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                               child: Text(
-                                expenses[i].text,
+                                AppStateScope.of(context).expenses[i].text,
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ),
@@ -77,10 +69,12 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                     Expanded(
                         child: Tooltip(
                           child: Text(
-                            niceDate(expenses[i].when),
+                            niceDate(
+                                AppStateScope.of(context).expenses[i].when),
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
-                          message: shortDate(expenses[i].when),
+                          message: shortDate(
+                              AppStateScope.of(context).expenses[i].when),
                         ),
                         flex: 2),
                     Expanded(
@@ -93,8 +87,8 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                                 showDialog(
                                     context: context,
                                     builder: (_) => DeleteDialog(
-                                        expense: expenses[i],
-                                        persons: persons)).then((value) {
+                                        expense: AppStateScope.of(context)
+                                            .expenses[i])).then((value) {
                                   if (value == RESULT.DELETED) {
                                     this.widget.callback();
                                   }

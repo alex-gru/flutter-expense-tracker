@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/dto/expense.dart';
 import 'package:flutter_expense_tracker/modules/dto/person.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:intl/intl.dart';
 
 final amountFormatter = NumberFormat("#,###.00#");
@@ -10,8 +11,11 @@ final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
 const PREF_DARK_MODE = 'darkMode';
 const PREF_PERSON = 'selectedPerson';
 
-Color getPersonColor(String person, List<Person> persons) {
-  return persons.indexWhere((p) => p.person == person) == 0
+Color getPersonColor(String person, BuildContext context) {
+  return AppStateScope.of(context)
+              .persons
+              .indexWhere((p) => p.person == person) ==
+          0
       ? Colors.green.shade600
       : Colors.orange.shade800;
 }
@@ -46,7 +50,7 @@ String shortDate(Timestamp timestamp) {
   return dateTimeFormatter.format(dateTime);
 }
 
-double calcSum(person, expenses) {
+double calcSum(person, List<Expense> expenses) {
   var expensesForPerson = expenses.where((element) => element.person == person);
   return expensesForPerson.isEmpty
       ? 0.0
@@ -55,25 +59,26 @@ double calcSum(person, expenses) {
           .reduce((value, element) => value + element);
 }
 
-void calcBalance(
+List<Person> calcBalance(
     List<Person> persons, List<Expense> expenses, BuildContext context) {
-  var _person0 = persons.elementAt(0).person;
-  var _person1 = persons.elementAt(1).person;
+  var person0 = persons.elementAt(0).person;
+  var person1 = persons.elementAt(1).person;
 
   // total amounts, e.g. € 38.58, € 45.31
-  var _sum0 = calcSum(_person0, expenses);
-  var _sum1 = calcSum(_person1, expenses);
+  var sum0 = calcSum(person0, expenses);
+  var sum1 = calcSum(person1, expenses);
 
   // share of person1 on total amount, e.g. 0.4599
-  var _share0 = expenses.isEmpty ? 0.5 : _sum0 / (_sum0 + _sum1);
-  var _share1 = 1 - _share0;
+  var share0 = expenses.isEmpty ? 0.5 : sum0 / (sum0 + sum1);
+  var share1 = 1 - share0;
 
   // "progress" values are used for sizing of the relative balance bar
   double width = MediaQuery.of(context).size.width;
-  var _progress0 = _share0 * width;
-  var _progress1 = _share1 * width;
+  var progress0 = share0 * width;
+  var progress1 = share1 * width;
 
-  persons.clear();
-  persons.add(Person(_person0, _sum0, _share0, _progress0));
-  persons.add(Person(_person1, _sum1, _share1, _progress1));
+  return [
+    Person(person0, sum0, share0, progress0),
+    Person(person1, sum1, share1, progress1)
+  ];
 }

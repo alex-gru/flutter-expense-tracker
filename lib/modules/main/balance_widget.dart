@@ -1,22 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/modules/dto/person.dart';
 import 'package:flutter_expense_tracker/modules/marker/behind_marker_static.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 
-import '../balance/balance.dart';
-import '../balance/avatar.dart';
 import '../balance/align.dart' as align;
+import '../balance/avatar.dart';
+import '../balance/balance.dart';
 
 class BalanceWidget extends StatelessWidget {
   const BalanceWidget({
     Key key,
-    @required List<Person> persons,
     @required this.relativeBalanceBarHeight,
-  })  : _persons = persons,
-        super(key: key);
+  }) : super(key: key);
 
-  final List<Person> _persons;
   final double relativeBalanceBarHeight;
 
   @override
@@ -26,13 +23,13 @@ class BalanceWidget extends StatelessWidget {
         Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: _persons.isEmpty
+            children: AppStateScope.of(context).persons.isEmpty
                 ? []
                 : [
                     Avatar(
-                        person: _persons.elementAt(0), persons: _persons),
+                        person: AppStateScope.of(context).persons.elementAt(0)),
                     Avatar(
-                        person: _persons.elementAt(1), persons: _persons),
+                        person: AppStateScope.of(context).persons.elementAt(1)),
                   ],
           ),
           height: 50,
@@ -42,7 +39,7 @@ class BalanceWidget extends StatelessWidget {
           children: [
             Container(
                 alignment: AlignmentDirectional.centerStart,
-                child: BehindMarkerStatic(persons: _persons)),
+                child: BehindMarkerStatic()),
             Container(
               alignment: AlignmentDirectional.bottomCenter,
               child: Stack(alignment: AlignmentDirectional.center, children: [
@@ -50,16 +47,18 @@ class BalanceWidget extends StatelessWidget {
                   Container(
                       height: relativeBalanceBarHeight,
                       child: Row(
-                        children: _persons.isEmpty
+                        children: AppStateScope.of(context).persons.isEmpty
                             ? []
                             : [
                                 Balance(
-                                    person: _persons.elementAt(0),
-                                    persons: _persons,
+                                    person: AppStateScope.of(context)
+                                        .persons
+                                        .elementAt(0),
                                     alignPercentage: align.Align.START),
                                 Balance(
-                                    person: _persons.elementAt(1),
-                                    persons: _persons,
+                                    person: AppStateScope.of(context)
+                                        .persons
+                                        .elementAt(1),
                                     alignPercentage: align.Align.END),
                               ],
                       )),
@@ -87,11 +86,13 @@ class BalanceWidget extends StatelessWidget {
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _persons.isEmpty
+                children: AppStateScope.of(context).persons.isEmpty
                     ? []
                     : [
-                        Text(' ${prettifyAmount(_persons[0].sumExpenses)}'),
-                        Text('${prettifyAmount(_persons[1].sumExpenses)} '),
+                        Text(
+                            ' ${prettifyAmount(AppStateScope.of(context).persons[0].sumExpenses)}'),
+                        Text(
+                            '${prettifyAmount(AppStateScope.of(context).persons[1].sumExpenses)} '),
                       ],
               ),
               height: 20,

@@ -3,30 +3,23 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../dto/person.dart';
-import 'dialog_result.dart';
 import '../dto/expense.dart';
 import '../utils/utils.dart';
+import 'dialog_result.dart';
 
 class DeleteDialog extends StatefulWidget {
   final Expense expense;
-  final List<Person> persons;
 
-  DeleteDialog({Expense expense, List<Person> persons})
-      : this.expense = expense,
-        this.persons = persons;
+  DeleteDialog({Expense expense}) : this.expense = expense;
 
   @override
-  _DeleteDialogState createState() => new _DeleteDialogState(expense, persons);
+  _DeleteDialogState createState() => new _DeleteDialogState(expense);
 }
 
 class _DeleteDialogState extends State<DeleteDialog> {
   final Expense expense;
-  List<Person> persons = [];
 
-  _DeleteDialogState(Expense expense, List<Person> persons)
-      : this.expense = expense,
-        this.persons = persons;
+  _DeleteDialogState(Expense expense) : this.expense = expense;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +34,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
             Expanded(
               child: Icon(
                 Icons.account_circle,
-                color: getPersonColor(expense.person, persons),
+                color: getPersonColor(expense.person, context),
               ),
               flex: 2,
             ),

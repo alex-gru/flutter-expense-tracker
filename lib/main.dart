@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'modules/main/home_widget.dart';
@@ -30,16 +31,18 @@ class _ExpensesAppState extends State<ExpensesApp> {
   @override
   Widget build(BuildContext context) {
     var title = 'Expense Tracker';
-    return MaterialApp(
-      title: title,
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+    return AppStateWidget(
+      child: MaterialApp(
+        title: title,
+        theme: ThemeData(
+          primarySwatch: Colors.lightBlue,
+        ),
+        darkTheme: ThemeData(
+          brightness: widget.darkMode ? Brightness.dark : Brightness.light,
+        ),
+        themeMode: widget.darkMode ? ThemeMode.dark : ThemeMode.light,
+        home: HomeWidget(title: title),
       ),
-      darkTheme: ThemeData(
-        brightness: widget.darkMode ? Brightness.dark : Brightness.light,
-      ),
-      themeMode: widget.darkMode ? ThemeMode.dark : ThemeMode.light,
-      home: HomeWidget(title: title),
     );
   }
 }

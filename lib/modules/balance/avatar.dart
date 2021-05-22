@@ -7,13 +7,10 @@ class Avatar extends StatelessWidget {
   const Avatar({
     Key key,
     @required Person person,
-    List<Person> persons,
   })  : _person = person,
-        _persons = persons,
         super(key: key);
 
   final Person _person;
-  final List<Person> _persons;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class Avatar extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
                   child: Icon(
                     Icons.account_circle,
-                    color: getPersonColor(_person.person, _persons),
+                    color: getPersonColor(_person.person, context),
                   ),
                 ),
                 Text(

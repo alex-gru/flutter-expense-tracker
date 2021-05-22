@@ -6,16 +6,13 @@ import '../dto/person.dart';
 
 class Balance extends StatelessWidget {
   final Person _person;
-  final List<Person> _persons;
   final align.Align _align;
 
   const Balance({
     Key key,
     Person person,
-    List<Person> persons,
     align.Align alignPercentage,
   })  : _person = person,
-        _persons = persons,
         _align = alignPercentage,
         super(key: key);
 
@@ -28,7 +25,7 @@ class Balance extends StatelessWidget {
       child: Stack(
         alignment: getAlignment(),
         children: [
-          Container(color: getPersonColor(_person.person, _persons)),
+          Container(color: getPersonColor(_person.person, context)),
           Text(
             prettifyShare(_person.share),
             maxLines: 1,

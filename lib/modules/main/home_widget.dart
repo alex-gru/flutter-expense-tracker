@@ -3,14 +3,15 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/dto/person.dart';
+import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 import 'package:flutter_restart/flutter_restart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'balance_widget.dart';
 import '../dialogs/add.dart';
 import '../dialogs/dialog_result.dart';
 import '../dto/expense.dart';
+import 'balance_widget.dart';
 import 'expenses_list_widget.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -23,14 +24,12 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  List<Expense> _expenses = [];
-  List<Person> _persons = [];
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    queryPersons().then((value) => queryExpenses(true));
+    queryPersons().then((persons) => queryExpenses(persons, true));
   }
 
   @override
@@ -57,7 +56,8 @@ class _HomeWidgetState extends State<HomeWidget> {
               message: 'Refresh',
               child: IconButton(
                   icon: Icon(Icons.refresh),
-                  onPressed: () => queryExpenses(true))),
+                  onPressed: () =>
+                      queryExpenses(AppStateScope.of(context).persons, true))),
         ],
       ),
       body: AnimatedOpacity(
@@ -69,14 +69,12 @@ class _HomeWidgetState extends State<HomeWidget> {
             children: [
               Expanded(
                   child: BalanceWidget(
-                      persons: _persons,
                       relativeBalanceBarHeight: relativeBalanceBarHeight),
                   flex: 28),
               Expanded(
                   child: ExpensesListWidget(
-                    persons: _persons,
-                    expenses: _expenses,
-                    callback: () => queryExpenses(false),
+                    callback: () =>
+                        queryExpenses(AppStateScope.of(context).persons, false),
                   ),
                   flex: 72),
             ],
@@ -85,10 +83,10 @@ class _HomeWidgetState extends State<HomeWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(context: context, builder: (_) => AddDialog(_persons))
+          showDialog(context: context, builder: (_) => AddDialog())
               .then((value) {
             if (value == RESULT.ADDED) {
-              queryExpenses(false);
+              queryExpenses(AppStateScope.of(context).persons, false);
             }
             return null;
           });
@@ -99,27 +97,28 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  Future<void> queryExpenses(bool animateFromCenter) async {
+  Future<void> queryExpenses(
+      List<Person> persons, bool animateFromCenter) async {
     log('call: queryExpenses');
     setState(() {
       _loading = true;
       if (animateFromCenter) {
         double width = MediaQuery.of(context).size.width;
-        _persons.elementAt(0).progress = 0.5 * width;
-        _persons.elementAt(1).progress = 0.5 * width;
+        persons.elementAt(0).progress = 0.5 * width;
+        persons.elementAt(1).progress = 0.5 * width;
       }
     });
 
     Query query = FirebaseFirestore.instance.collection('expenses');
     return query
-        .where('person', whereIn: _persons.map((e) => e.person).toList())
+        .where('person', whereIn: persons.map((e) => e.person).toList())
         .orderBy('when', descending: true)
         .get()
         .then((querySnapshot) async {
       setState(() {
-        _expenses.clear();
+        List<Expense> expenses = [];
         querySnapshot.docs.forEach((document) {
-          _expenses.add(Expense(
+          expenses.add(Expense(
             document.id,
             document.get('person'),
             document.get('value'),
@@ -127,23 +126,25 @@ class _HomeWidgetState extends State<HomeWidget> {
             document.get('text'),
           ));
         });
-        calcBalance(_persons, _expenses, context);
-        log('${_persons.toString()}');
+        List<Person> personsWithBalances =
+            calcBalance(persons, expenses, context);
+        AppStateWidget.of(context).setPersons(personsWithBalances);
+        AppStateWidget.of(context).setExpenses(expenses);
+        log('${persons.toString()}');
         _loading = false;
       });
     });
   }
 
-  Future<void> queryPersons() async {
+  Future<List<Person>> queryPersons() async {
     log('call: queryPersons');
     Query query = FirebaseFirestore.instance.collection('persons').limit(1);
     return query.get().then((querySnapshot) async {
-      setState(() {
-        _persons.clear();
-        var result = querySnapshot.docs.first;
-        _persons.add(Person.create(result.get('person1')));
-        _persons.add(Person.create(result.get('person2')));
-      });
+      List<Person> persons = [];
+      var result = querySnapshot.docs.first;
+      persons.add(Person.create(result.get('person1')));
+      persons.add(Person.create(result.get('person2')));
+      return persons;
     });
   }
 }
