@@ -5,7 +5,7 @@ import 'package:flutter_expense_tracker/modules/marker/behind_marker_static.dart
 import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 
 import '../balance/balance.dart';
-import '../balance/person_avatar.dart';
+import '../balance/avatar.dart';
 import '../balance/align.dart' as align;
 
 class BalanceWidget extends StatelessWidget {
@@ -29,9 +29,9 @@ class BalanceWidget extends StatelessWidget {
             children: _persons.isEmpty
                 ? []
                 : [
-                    PersonAvatar(
+                    Avatar(
                         person: _persons.elementAt(0), persons: _persons),
-                    PersonAvatar(
+                    Avatar(
                         person: _persons.elementAt(1), persons: _persons),
                   ],
           ),

@@ -3,8 +3,8 @@ import 'package:flutter_expense_tracker/modules/utils/utils.dart';
 
 import '../dto/person.dart';
 
-class PersonAvatar extends StatelessWidget {
-  const PersonAvatar({
+class Avatar extends StatelessWidget {
+  const Avatar({
     Key key,
     @required Person person,
     List<Person> persons,
