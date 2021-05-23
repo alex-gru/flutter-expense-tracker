@@ -39,7 +39,7 @@ class BehindMarkerStatic extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.fromLTRB(left - _markerWidth / 2, 16, 0, 0),
         child: Tooltip(
-          message: '${personBehind.person} is ${prettifyAmount(diff)} behind.',
+          message: '${personBehind.person} is ${prettifyAmount(diff.abs())} behind.',
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
@@ -56,7 +56,7 @@ class BehindMarkerStatic extends StatelessWidget {
                   ),
                 ),
               ),
-              Text('- ${prettifyAmount(diff)}')
+              Text('- ${prettifyAmount(diff.abs())}')
             ],
           ),
         ),
