@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/dto/expense.dart';
@@ -81,4 +83,49 @@ List<Person> calcBalance(
     Person(person0, sum0, share0, progress0),
     Person(person1, sum1, share1, progress1)
   ];
+}
+
+Future<void> queryExpenses(
+    List<Person> persons, bool animateFromCenter, BuildContext context) async {
+  log('call: queryExpenses');
+  // _loading = true;
+  if (animateFromCenter) {
+    double width = MediaQuery.of(context).size.width;
+    persons.elementAt(0).progress = 0.5 * width;
+    persons.elementAt(1).progress = 0.5 * width;
+  }
+  Query query = FirebaseFirestore.instance.collection('expenses');
+  return query
+      .where('person', whereIn: persons.map((e) => e.person).toList())
+      .orderBy('when', descending: true)
+      .get()
+      .then((querySnapshot) async {
+    List<Expense> expenses = [];
+    querySnapshot.docs.forEach((document) {
+      expenses.add(Expense(
+        document.id,
+        document.get('person'),
+        document.get('value'),
+        document.get('when'),
+        document.get('text'),
+      ));
+    });
+    List<Person> personsWithBalances = calcBalance(persons, expenses, context);
+    AppStateWidget.of(context).setPersons(personsWithBalances);
+    AppStateWidget.of(context).setExpenses(expenses);
+    log('${personsWithBalances.toString()}');
+    // _loading = false;
+  });
+}
+
+Future<List<Person>> queryPersons() async {
+  log('call: queryPersons');
+  Query query = FirebaseFirestore.instance.collection('persons').limit(1);
+  return query.get().then((querySnapshot) async {
+    List<Person> persons = [];
+    var result = querySnapshot.docs.first;
+    persons.add(Person.create(result.get('person1')));
+    persons.add(Person.create(result.get('person2')));
+    return persons;
+  });
 }

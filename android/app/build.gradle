@@ -34,7 +34,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "fyi.gru.flutter_expense_tracker"
         minSdkVersion 16
         targetSdkVersion 30

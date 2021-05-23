@@ -24,10 +24,9 @@ class BehindMarkerStatic extends StatelessWidget {
 
     var middle = (personBehind.progress + personLeading.progress) / 2;
 
-    var left =
-        AppStateScope.of(context).persons.elementAt(0).progress < middle
-            ? (middle - middle / 2)
-            : (middle + middle / 2);
+    var left = AppStateScope.of(context).persons.elementAt(0).progress < middle
+        ? (middle - middle / 2)
+        : (middle + middle / 2);
 
     var diff = (personLeading.progress + personBehind.progress) / 2 -
         personBehind.sumExpenses;
@@ -39,7 +38,8 @@ class BehindMarkerStatic extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.fromLTRB(left - _markerWidth / 2, 16, 0, 0),
         child: Tooltip(
-          message: '${personBehind.person} is ${prettifyAmount(diff.abs())} behind.',
+          message:
+              '${personBehind.person} is ${prettifyAmount(diff.abs())} behind.',
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
