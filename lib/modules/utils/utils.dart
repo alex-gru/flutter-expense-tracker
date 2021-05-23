@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 final amountFormatter = NumberFormat("#,###.00#");
 final shareFormatter = NumberFormat("##.0#");
-final dateTimeFormatter = DateFormat('yyyy-MM-dd kk:mm');
+final dateTimeFormatter = DateFormat('yyyy-MM-dd HH:mm');
 const PREF_DARK_MODE = 'darkMode';
 const PREF_PERSON = 'selectedPerson';
 
