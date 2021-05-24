@@ -7,7 +7,7 @@ import 'package:flutter_expense_tracker/modules/dto/person.dart';
 import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:intl/intl.dart';
 
-final amountFormatter = NumberFormat("#,###.00#");
+final amountFormatter = NumberFormat("#,###.0#");
 final shareFormatter = NumberFormat("##.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd HH:mm');
 const PREF_DARK_MODE = 'darkMode';
