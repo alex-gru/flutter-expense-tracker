@@ -26,7 +26,7 @@ class BehindMarkerStatic extends StatelessWidget {
         ? (middle - middle / 2)
         : (middle + middle / 2);
 
-    var diff = (personLeading.progress + personBehind.progress) / 2 -
+    var diff = (personLeading.sumExpenses + personBehind.sumExpenses) / 2 -
         personBehind.sumExpenses;
 
     var hide = personLeading.progress == personBehind.progress;
