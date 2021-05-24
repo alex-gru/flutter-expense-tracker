@@ -22,17 +22,23 @@ class BehindMarkerStatic extends StatelessWidget {
 
     var middle = (personBehind.progress + personLeading.progress) / 2;
 
-    var left = AppStateScope.of(context).persons.elementAt(0).progress < middle
-        ? (middle - middle / 2)
-        : (middle + middle / 2);
+    var even = personLeading.progress == personBehind.progress;
 
-    var diff = (personLeading.sumExpenses + personBehind.sumExpenses) / 2 -
-        personBehind.sumExpenses;
+    var left = even
+        ? middle
+        : AppStateScope.of(context).persons.elementAt(0).progress < middle
+            ? (middle - middle / 2)
+            : (middle + middle / 2);
 
-    var hide = personLeading.progress == personBehind.progress;
+    // diff to leading person
+    var diff = personLeading.sumExpenses - personBehind.sumExpenses;
+
+    // alternative: diff to average
+    // var diff = (personLeading.sumExpenses + personBehind.sumExpenses) / 2 -
+    //     personBehind.sumExpenses;
 
     return Opacity(
-      opacity: hide ? 0 : 1,
+      opacity: 1,
       child: Padding(
         padding: EdgeInsets.fromLTRB(left - _markerWidth / 2, 16, 0, 0),
         child: Tooltip(
@@ -47,14 +53,16 @@ class BehindMarkerStatic extends StatelessWidget {
                   height: _markerHeight,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: getPersonColor(personBehind.person, context),
+                      color: even
+                          ? Theme.of(context).accentColor
+                          : getPersonColor(personBehind.person, context),
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
               ),
-              Text('- ${prettifyAmount(diff.abs())}')
+              Text(even ? 'EVEN' : '- ${prettifyAmount(diff.abs())}')
             ],
           ),
         ),
