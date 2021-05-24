@@ -8,9 +8,7 @@ class BehindMarkerStatic extends StatelessWidget {
   final double _markerWidth = 100;
   final double _markerHeight = 25;
 
-  const BehindMarkerStatic({
-    Key key,
-  }) : super(key: key);
+  const BehindMarkerStatic();
 
   @override
   Widget build(BuildContext context) {

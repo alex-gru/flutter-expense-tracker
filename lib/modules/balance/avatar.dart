@@ -5,10 +5,9 @@ import '../dto/person.dart';
 
 class Avatar extends StatelessWidget {
   const Avatar({
-    Key key,
-    @required Person person,
-  })  : _person = person,
-        super(key: key);
+    required Person person,
+  })   : _person = person,
+        super();
 
   final Person _person;
 

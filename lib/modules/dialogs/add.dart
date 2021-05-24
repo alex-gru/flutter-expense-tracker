@@ -18,9 +18,9 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
-  String _person;
-  double _amount;
-  String _text;
+  String? _person;
+  double? _amount;
+  String? _text;
 
   _AddDialogState() : super();
 
@@ -49,9 +49,9 @@ class _AddDialogState extends State<AddDialog> {
                 icon: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                 ),
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   SharedPreferences.getInstance().then((sharedPref) =>
-                      sharedPref.setString(PREF_PERSON, _person));
+                      sharedPref.setString(PREF_PERSON, _person!));
                   setState(() {
                     _person = newValue;
                   });
@@ -128,11 +128,11 @@ class _AddDialogState extends State<AddDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _amount == null || _text == null || _text.isEmpty
+          onPressed: _amount == null || _text == null || _text!.isEmpty
               ? null
               : () {
-                  var _expense =
-                      Expense.create(_person, _amount, Timestamp.now(), _text);
+                  var _expense = Expense.create(
+                      _person!, _amount!, Timestamp.now(), _text!);
                   FirebaseFirestore.instance
                       .collection('expenses')
                       .add({

@@ -1,7 +1,7 @@
 class Person {
-  String person;
-  double sumExpenses;
-  double share;
+  final String person;
+  final double sumExpenses;
+  final double share;
   double progress;
 
   Person(this.person, this.sumExpenses, this.share, this.progress);

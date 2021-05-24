@@ -10,22 +10,21 @@ class AppState {
   final List<Expense> expenses;
 
   AppState copyWith({
-    List<Person> persons,
-    List<Expense> expenses,
+    List<Person>? persons,
+    List<Expense>? expenses,
   }) {
     return AppState(persons ?? this.persons, expenses ?? this.expenses);
   }
 }
 
-// TODO: switch to null safety! (pubspec.yaml)
 class AppStateScope extends InheritedWidget {
-  AppStateScope(this.data, {Key key, Widget child})
+  AppStateScope(this.data, {Key? key, required Widget child})
       : super(key: key, child: child);
 
   final AppState data;
 
   static AppState of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppStateScope>().data;
+    return context.dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
   }
 
   @override
@@ -35,12 +34,12 @@ class AppStateScope extends InheritedWidget {
 }
 
 class AppStateWidget extends StatefulWidget {
-  AppStateWidget({this.child});
+  AppStateWidget({required this.child});
 
   final Widget child;
 
   static AppStateWidgetState of(BuildContext context) {
-    return context.findAncestorStateOfType<AppStateWidgetState>();
+    return context.findAncestorStateOfType<AppStateWidgetState>()!;
   }
 
   @override

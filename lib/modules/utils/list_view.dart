@@ -8,7 +8,7 @@ import '../dialogs/dialog_result.dart';
 class ExpenseListView extends StatefulWidget {
   final void Function() callback;
 
-  ExpenseListView({Function callback}) : this.callback = callback;
+  ExpenseListView(this.callback);
 
   @override
   _ExpenseListViewState createState() => new _ExpenseListViewState();
@@ -85,7 +85,7 @@ class _ExpenseListViewState extends State<ExpenseListView> {
                                 showDialog(
                                     context: context,
                                     builder: (_) => DeleteDialog(
-                                        expense: AppStateScope.of(context)
+                                        AppStateScope.of(context)
                                             .expenses[i])).then((value) {
                                   if (value == RESULT.DELETED) {
                                     this.widget.callback();

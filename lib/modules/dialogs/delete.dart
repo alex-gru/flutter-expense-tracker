@@ -10,7 +10,7 @@ import 'dialog_result.dart';
 class DeleteDialog extends StatefulWidget {
   final Expense expense;
 
-  DeleteDialog({Expense expense}) : this.expense = expense;
+  DeleteDialog(this.expense);
 
   @override
   _DeleteDialogState createState() => new _DeleteDialogState(expense);

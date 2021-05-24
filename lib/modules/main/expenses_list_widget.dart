@@ -7,11 +7,7 @@ import '../utils/list_view.dart';
 class ExpensesListWidget extends StatelessWidget {
   final void Function() _callback;
 
-  const ExpensesListWidget({
-    Key key,
-    Function callback,
-  })  : _callback = callback,
-        super(key: key);
+  ExpensesListWidget(this._callback);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +16,6 @@ class ExpensesListWidget extends StatelessWidget {
             child: Text('Pretty empty here. Use the button to add expenses.',
                 style:
                     TextStyle(color: Colors.grey, fontWeight: FontWeight.w300)))
-        : ExpenseListView(callback: _callback);
+        : ExpenseListView(_callback);
   }
 }

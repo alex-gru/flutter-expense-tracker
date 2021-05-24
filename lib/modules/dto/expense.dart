@@ -1,19 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Expense {
-  String id;
-  String person;
-  double value;
-  Timestamp when;
-  String text;
+  final String id;
+  final String person;
+  final double value;
+  final Timestamp when;
+  final String text;
 
-  Expense(String id, String person, double value, Timestamp when, String text) {
-    this.id = id;
-    this.person = person;
-    this.value = value;
-    this.when = when;
-    this.text = text;
-  }
+  Expense(this.id, this.person, this.value, this.when, this.text);
 
   @override
   String toString() {

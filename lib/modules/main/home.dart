@@ -5,9 +5,9 @@ import 'package:flutter_expense_tracker/modules/dialogs/dialog_result.dart';
 import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/theme_model.dart';
 
+import '../utils/utils.dart';
 import 'balance_widget.dart';
 import 'expenses_list_widget.dart';
-import '../utils/utils.dart';
 
 class Home extends StatefulWidget {
   final String _title;
@@ -62,12 +62,10 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                  child: BalanceWidget(
-                      relativeBalanceBarHeight: relativeBalanceBarHeight),
-                  flex: 28),
+                  child: BalanceWidget(relativeBalanceBarHeight), flex: 28),
               Expanded(
                   child: ExpensesListWidget(
-                    callback: () => queryExpenses(
+                    () => queryExpenses(
                         AppStateScope.of(context).persons, false, context),
                   ),
                   flex: 72),

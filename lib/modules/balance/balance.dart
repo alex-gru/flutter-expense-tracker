@@ -9,12 +9,11 @@ class Balance extends StatelessWidget {
   final align.Align _align;
 
   const Balance({
-    Key key,
-    Person person,
-    align.Align alignPercentage,
-  })  : _person = person,
+    required Person person,
+    required align.Align alignPercentage,
+  })   : _person = person,
         _align = alignPercentage,
-        super(key: key);
+        super();
 
   @override
   Widget build(BuildContext context) {

@@ -7,9 +7,7 @@ import '../utils/utils.dart';
 class BehindMarkerRelative extends StatelessWidget {
   final double _markerWidth = 100;
 
-  const BehindMarkerRelative({
-    Key key,
-  }) : super(key: key);
+  const BehindMarkerRelative();
 
   @override
   Widget build(BuildContext context) {

@@ -9,10 +9,7 @@ import '../balance/avatar.dart';
 import '../balance/balance.dart';
 
 class BalanceWidget extends StatelessWidget {
-  const BalanceWidget({
-    Key key,
-    @required this.relativeBalanceBarHeight,
-  }) : super(key: key);
+  const BalanceWidget(this.relativeBalanceBarHeight);
 
   final double relativeBalanceBarHeight;
 
