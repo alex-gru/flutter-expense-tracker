@@ -87,9 +87,12 @@ class BalanceWidget extends StatelessWidget {
                     ? []
                     : [
                         Text(
-                            ' ${prettifyAmount(AppStateScope.of(context).persons[0].sumExpenses)}'),
+                          ' ${prettifyAmount(AppStateScope.of(context).persons[0].sumExpenses)}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
                         Text(
-                            '${prettifyAmount(AppStateScope.of(context).persons[1].sumExpenses)} '),
+                            '${prettifyAmount(AppStateScope.of(context).persons[1].sumExpenses)} ',
+                            style: Theme.of(context).textTheme.subtitle2),
                       ],
               ),
               height: 20,
