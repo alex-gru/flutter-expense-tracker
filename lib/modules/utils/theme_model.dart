@@ -13,8 +13,8 @@ class ThemeModel with ChangeNotifier {
 
   ThemeMode initMode() {
     SharedPreferences.getInstance().then((prefs) {
-      var _darkModePref = prefs.getBool(PREF_DARK_MODE) ?? true;
-      _mode = _darkModePref ? ThemeMode.dark : ThemeMode.light;
+      var darkModePref = prefs.getBool(PREF_DARK_MODE) ?? true;
+      _mode = darkModePref ? ThemeMode.dark : ThemeMode.light;
       notify();
     });
     return _mode;

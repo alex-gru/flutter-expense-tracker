@@ -6,6 +6,7 @@ import 'package:flutter_expense_tracker/modules/dialogs/add.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/dialog_result.dart';
 import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/theme_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/utils.dart';
 import 'balance_widget.dart';
@@ -32,7 +33,15 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _model.initMode();
-    queryPersons().then((persons) => queryExpenses(persons, true, context));
+    SharedPreferences.getInstance().then((prefs) {
+      var accountId = prefs.getString(PREF_ACCOUNT_ID);
+      if (accountId == null) {
+        log('no accountId available yet!');
+        // TODO show setup dialog here
+      } else {
+        queryPersons(accountId).then((persons) => queryExpenses(persons, true, context));
+      }
+    });
   }
 
   @override
