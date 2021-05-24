@@ -120,6 +120,7 @@ class _AddDialogState extends State<AddDialog> {
                   border: OutlineInputBorder(),
                   labelText: 'Describe the expense',
                 ),
+                textCapitalization: TextCapitalization.sentences,
               ),
               constraints: BoxConstraints.tight(Size(200, 100)),
             ),
