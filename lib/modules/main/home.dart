@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/add.dart';
@@ -29,12 +31,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _model.initMode();
     queryPersons().then((persons) => queryExpenses(persons, true, context));
   }
 
   @override
   Widget build(BuildContext context) {
     double relativeBalanceBarHeight = 20;
+    log('build home');
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -33,7 +33,6 @@ class _ExpensesAppState extends State<ExpensesApp> {
       create: (_) => ThemeModel(),
       child: Consumer<ThemeModel>(
         builder: (_, model, __) {
-          model.initMode();
           return AppStateWidget(
               child: MaterialApp(
             title: title,
