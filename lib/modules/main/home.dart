@@ -37,6 +37,7 @@ class _HomeState extends State<Home> {
     double relativeBalanceBarHeight = 20;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(_title),
         actions: [
