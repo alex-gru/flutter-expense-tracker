@@ -43,7 +43,7 @@ class _ShareDialogState extends State<ShareDialog> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.group),
+                    Icon(Icons.group, color: Theme.of(context).accentColor),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(4,0,0,0),
                       child: Text(
@@ -59,10 +59,15 @@ class _ShareDialogState extends State<ShareDialog> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                QrImage(
-                  data: _accountId,
-                  version: QrVersions.auto,
-                  size: 200.0,
+                Container(
+                  width: 200,
+                  height: 200,
+                  child: QrImage(
+                    data: _accountId,
+                    version: QrVersions.auto,
+                    size: 200.0,
+                    foregroundColor: Theme.of(context).accentColor,
+                  ),
                 ),
                 Text(
                   "Scan this QR code on the other device to join.",
