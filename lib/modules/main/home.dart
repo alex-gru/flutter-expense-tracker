@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/add.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/dialog_result.dart';
+import 'package:flutter_expense_tracker/modules/dialogs/share.dart';
 import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/theme_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,6 +61,25 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.nightlight_round),
                 onPressed: () => _model.toggleMode(),
               )),
+          Tooltip(
+              message: 'Share',
+              child: IconButton(
+                  icon: Icon(Icons.group),
+                  onPressed: () => {
+                        SharedPreferences.getInstance().then((prefs) {
+                          var accountId = prefs.getString(PREF_ACCOUNT_ID)!;
+                          showDialog(
+                                  context: context,
+                                  builder: (_) => ShareDialog(accountId))
+                              .then((value) {
+                            if (value == RESULT.ADDED) {
+                              queryExpenses(AppStateScope.of(context).persons,
+                                  false, context);
+                            }
+                            return null;
+                          });
+                        })
+                      })),
           Tooltip(
               message: 'Refresh',
               child: IconButton(
