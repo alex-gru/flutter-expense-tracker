@@ -121,11 +121,15 @@ Future<void> queryExpenses(
 
 Future<List<Person>> queryPersons(String accountId) async {
   log('call: queryPersons');
-  DocumentReference query = FirebaseFirestore.instance.collection('persons').doc(accountId);
-  return query.get().then((account) async {
-    List<Person> persons = [];
-    persons.add(Person.create(account.get('person1')));
-    persons.add(Person.create(account.get('person2')));
-    return persons;
-  });
+  try {
+    DocumentReference query = FirebaseFirestore.instance.collection('persons').doc(accountId);
+    return query.get().then((account) async {
+        List<Person> persons = [];
+        persons.add(Person.create(account.get('person1')));
+        persons.add(Person.create(account.get('person2')));
+        return persons;
+      });
+  } catch (e) {
+   return [];
+  }
 }

@@ -40,7 +40,8 @@ class _HomeState extends State<Home> {
         log('no accountId available yet!');
         // TODO show setup dialog here
       } else {
-        queryPersons(accountId).then((persons) => queryExpenses(persons, true, context));
+        queryPersons(accountId)
+            .then((persons) => queryExpenses(persons, true, context));
       }
     });
   }
@@ -67,16 +68,26 @@ class _HomeState extends State<Home> {
                   icon: Icon(Icons.group),
                   onPressed: () => {
                         SharedPreferences.getInstance().then((prefs) {
-                          var accountId = prefs.getString(PREF_ACCOUNT_ID)!;
+                          var accountId = prefs.getString(PREF_ACCOUNT_ID);
                           showDialog(
                                   context: context,
                                   builder: (_) => ShareDialog(accountId))
-                              .then((value) {
-                            if (value == RESULT.ADDED) {
-                              queryExpenses(AppStateScope.of(context).persons,
-                                  false, context);
+                              .then((value) async {
+                            if (value != RESULT.CANCEL) {
+                              final persons = await queryPersons(value);
+                              final msg;
+                              if (persons.isEmpty) {
+                                msg = 'Could not find a list for the provided code.';
+                              } else {
+                                msg = 'Successfully joined the list.';
+                                prefs.setString(PREF_ACCOUNT_ID, value);
+                                queryExpenses(persons, true, context);
+                              }
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(msg),
+                              ));
                             }
-                            return null;
                           });
                         })
                       })),

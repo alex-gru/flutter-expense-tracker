@@ -7,7 +7,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'dialog_result.dart';
 
 class ShareDialog extends StatefulWidget {
-  final String _accountId;
+  final String? _accountId;
 
   ShareDialog(this._accountId);
 
@@ -16,7 +16,7 @@ class ShareDialog extends StatefulWidget {
 }
 
 class _ShareDialogState extends State<ShareDialog> {
-  final String _accountId;
+  final String? _accountId;
   bool _showQr = false;
 
   _ShareDialogState(this._accountId);
@@ -29,7 +29,7 @@ class _ShareDialogState extends State<ShareDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Visibility(
-            visible: !_showQr,
+            visible: _accountId != null && !_showQr,
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   shape: StadiumBorder(),
@@ -56,7 +56,7 @@ class _ShareDialogState extends State<ShareDialog> {
                 )),
           ),
           Visibility(
-            visible: _showQr,
+            visible: _accountId != null && _showQr,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -65,7 +65,7 @@ class _ShareDialogState extends State<ShareDialog> {
                   width: 200,
                   height: 200,
                   child: QrImage(
-                    data: _accountId,
+                    data: _accountId ?? '',
                     version: QrVersions.auto,
                     size: 200.0,
                     foregroundColor: Colors.black,
@@ -93,7 +93,6 @@ class _ShareDialogState extends State<ShareDialog> {
             visible: !_showQr,
             child: Column(
               children: [
-                Divider(),
                 OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       shape: StadiumBorder(),
@@ -106,7 +105,7 @@ class _ShareDialogState extends State<ShareDialog> {
                         MaterialPageRoute(builder: (context) => QrScanner()),
                       );
                       log('QR code result: $result');
-                      // TODO: set accountId here
+                      Navigator.pop(context, result ?? RESULT.CANCEL);
                     },
                     child: Text(
                       "Scan QR code to join list",
