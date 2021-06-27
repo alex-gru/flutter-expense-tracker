@@ -7,19 +7,19 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'dialog_result.dart';
 
 class ShareDialog extends StatefulWidget {
-  final String? _accountId;
+  final String? _listId;
 
-  ShareDialog(this._accountId);
+  ShareDialog(this._listId);
 
   @override
-  _ShareDialogState createState() => new _ShareDialogState(_accountId);
+  _ShareDialogState createState() => new _ShareDialogState(_listId);
 }
 
 class _ShareDialogState extends State<ShareDialog> {
-  final String? _accountId;
+  final String? _listId;
   bool _showQr = false;
 
-  _ShareDialogState(this._accountId);
+  _ShareDialogState(this._listId);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _ShareDialogState extends State<ShareDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Visibility(
-            visible: _accountId != null && !_showQr,
+            visible: _listId != null && !_showQr,
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   shape: StadiumBorder(),
@@ -56,7 +56,7 @@ class _ShareDialogState extends State<ShareDialog> {
                 )),
           ),
           Visibility(
-            visible: _accountId != null && _showQr,
+            visible: _listId != null && _showQr,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -65,7 +65,7 @@ class _ShareDialogState extends State<ShareDialog> {
                   width: 200,
                   height: 200,
                   child: QrImage(
-                    data: _accountId ?? '',
+                    data: _listId ?? '',
                     version: QrVersions.auto,
                     size: 200.0,
                     foregroundColor: Colors.black,
@@ -88,7 +88,7 @@ class _ShareDialogState extends State<ShareDialog> {
               ],
             ),
           ),
-          // Text(_accountId),
+          // Text(_listId),
           Visibility(
             visible: !_showQr,
             child: Column(

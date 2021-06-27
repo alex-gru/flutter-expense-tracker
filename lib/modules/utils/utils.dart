@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 final amountFormatter = NumberFormat("#,###.0#");
 final shareFormatter = NumberFormat("##.0#");
 final dateTimeFormatter = DateFormat('yyyy-MM-dd HH:mm');
-const PREF_ACCOUNT_ID = 'accountId';
+const PREF_LIST_ID = 'listId';
 const PREF_DARK_MODE = 'darkMode';
 const PREF_PERSON = 'selectedPerson';
 
@@ -119,14 +119,14 @@ Future<void> queryExpenses(
   });
 }
 
-Future<List<Person>> queryPersons(String accountId) async {
+Future<List<Person>> queryPersons(String listId) async {
   log('call: queryPersons');
   try {
-    DocumentReference query = FirebaseFirestore.instance.collection('persons').doc(accountId);
-    return query.get().then((account) async {
+    DocumentReference query = FirebaseFirestore.instance.collection('lists').doc(listId);
+    return query.get().then((list) async {
         List<Person> persons = [];
-        persons.add(Person.create(account.get('person1')));
-        persons.add(Person.create(account.get('person2')));
+        persons.add(Person.create(list.get('person1')));
+        persons.add(Person.create(list.get('person2')));
         return persons;
       });
   } catch (e) {

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/add.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/dialog_result.dart';
+import 'package:flutter_expense_tracker/modules/dialogs/setup.dart';
 import 'package:flutter_expense_tracker/modules/dialogs/share.dart';
 import 'package:flutter_expense_tracker/modules/state/app_state.dart';
 import 'package:flutter_expense_tracker/modules/utils/theme_model.dart';
@@ -35,13 +36,23 @@ class _HomeState extends State<Home> {
     super.initState();
     _model.initMode();
     SharedPreferences.getInstance().then((prefs) {
-      var accountId = prefs.getString(PREF_ACCOUNT_ID);
-      if (accountId == null) {
-        log('no accountId available yet!');
-        handleShare(context);
+      var listId = prefs.getString(PREF_LIST_ID);
+      if (listId == null) {
+        log('no listId available yet!');
+        showDialog(context: context, builder: (_) => SetupDialog())
+            .then((value) {
+          if (value == null || value == RESULT.CANCEL) {
+            log('setup dialog cancelled.');
+          } else {
+            log('new list created successfully: $value');
+            prefs.setString(PREF_LIST_ID, value)
+                .then((listId) => queryPersons(value)
+                .then((persons) => queryExpenses(persons, true, context))
+            );
+          }
+        });
       } else {
-        queryPersons(accountId)
-            .then((persons) => queryExpenses(persons, true, context));
+        queryPersons(listId).then((persons) => queryExpenses(persons, true, context));
       }
     });
   }
@@ -113,8 +124,8 @@ class _HomeState extends State<Home> {
   Future<Set<Future<dynamic>>> handleShare(BuildContext context) async {
     return {
       SharedPreferences.getInstance().then((prefs) {
-        var accountId = prefs.getString(PREF_ACCOUNT_ID);
-        showDialog(context: context, builder: (_) => ShareDialog(accountId))
+        var listId = prefs.getString(PREF_LIST_ID);
+        showDialog(context: context, builder: (_) => ShareDialog(listId))
             .then((value) async {
           if (value != null && value != RESULT.CANCEL) {
             final persons = await queryPersons(value);
@@ -123,7 +134,7 @@ class _HomeState extends State<Home> {
               msg = 'Could not find a list for the provided code.';
             } else {
               msg = 'Successfully joined the list.';
-              prefs.setString(PREF_ACCOUNT_ID, value);
+              prefs.setString(PREF_LIST_ID, value);
               queryExpenses(persons, true, context);
             }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
