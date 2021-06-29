@@ -45,14 +45,14 @@ class _HomeState extends State<Home> {
             log('setup dialog cancelled.');
           } else {
             log('new list created successfully: $value');
-            prefs.setString(PREF_LIST_ID, value)
-                .then((listId) => queryPersons(value)
-                .then((persons) => queryExpenses(persons, true, context))
-            );
+            prefs.setString(PREF_LIST_ID, value).then((listId) =>
+                queryPersons(value)
+                    .then((persons) => queryExpenses(persons, true, context)));
           }
         });
       } else {
-        queryPersons(listId).then((persons) => queryExpenses(persons, true, context));
+        queryPersons(listId)
+            .then((persons) => queryExpenses(persons, true, context));
       }
     });
   }
@@ -127,7 +127,10 @@ class _HomeState extends State<Home> {
         var listId = prefs.getString(PREF_LIST_ID);
         showDialog(context: context, builder: (_) => ShareDialog(listId))
             .then((value) async {
-          if (value != null && value != RESULT.CANCEL) {
+          if (value == RESULT.LEAVE_LIST) {
+            log('leave list now.');
+            // TODO
+          } else if (value != null && value != RESULT.CANCEL) {
             final persons = await queryPersons(value);
             final msg;
             if (persons.isEmpty) {
