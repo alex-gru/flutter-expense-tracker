@@ -45,7 +45,7 @@ class _QrScannerState extends State<QrScanner> {
                   onQRViewCreated: _onQRViewCreated,
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
                   child: Visibility(
                       visible: _invalidQrProvided,
                       child:
@@ -59,7 +59,7 @@ class _QrScannerState extends State<QrScanner> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
-                            child: Text("Could not find a list for the provided QR code. Try again."),
+                            child: Text("Invalid QR code provided. Try again."),
                           ))),
                 ),
               ])),
