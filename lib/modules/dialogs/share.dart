@@ -30,6 +30,7 @@ class _ShareDialogState extends State<ShareDialog> {
             "Share List",
             style: Theme.of(context).textTheme.headline6,
           ),
+          Divider(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

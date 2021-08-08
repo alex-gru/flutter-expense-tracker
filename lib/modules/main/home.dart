@@ -39,22 +39,26 @@ class _HomeState extends State<Home> {
       var listId = prefs.getString(PREF_LIST_ID);
       if (listId == null) {
         log('no listId available yet!');
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => SetupDialog()).then((value) {
-          if (value == null || value == RESULT.CANCEL) {
-            log('setup dialog cancelled.');
-          } else {
-            log('new list created successfully: $value');
-            prefs.setString(PREF_LIST_ID, value).then((listId) =>
-                queryPersons(value)
-                    .then((persons) => queryExpenses(persons, true, context)));
-          }
-        });
+        showSetupDialog(prefs);
       } else {
         queryPersons(listId)
             .then((persons) => queryExpenses(persons, true, context));
+      }
+    });
+  }
+
+  void showSetupDialog(SharedPreferences prefs) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => SetupDialog()).then((value) {
+      if (value == null || value == RESULT.CANCEL) {
+        log('setup dialog cancelled.');
+      } else {
+        log('new list created successfully: $value');
+        prefs.setString(PREF_LIST_ID, value).then((listId) =>
+            queryPersons(value)
+                .then((persons) => queryExpenses(persons, true, context)));
       }
     });
   }
@@ -135,19 +139,7 @@ class _HomeState extends State<Home> {
             prefs.remove(PREF_PERSON);
             AppStateWidget.of(context).setPersons([]);
             AppStateWidget.of(context).setExpenses([]);
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => SetupDialog()).then((value) {
-              if (value == null || value == RESULT.CANCEL) {
-                log('setup dialog cancelled.');
-              } else {
-                log('new list created successfully: $value');
-                prefs.setString(PREF_LIST_ID, value).then((listId) =>
-                    queryPersons(value)
-                        .then((persons) => queryExpenses(persons, true, context)));
-              }
-            });
+            showSetupDialog(prefs);
           } else if (value != null && value != RESULT.CANCEL) {
             final persons = await queryPersons(value);
             final msg;
