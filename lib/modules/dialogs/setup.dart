@@ -50,7 +50,7 @@ class _SetupDialogState extends State<SetupDialog> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 18, 0, 18),
             child: Text(
-              "Expense Tracker helps you track household expenses.",
+              "Expense Tracker helps you track household expenses.\n\nIf you want to join an existing list, simply scan the QR code from the other device. Otherwise, create a new one.",
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ),

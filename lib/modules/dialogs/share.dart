@@ -50,7 +50,7 @@ class _ShareDialogState extends State<ShareDialog> {
                 children: [
                   Icon(Icons.info_outline),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(4, 8, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(4, 16, 0, 0),
                     width: 200,
                     child: Text(
                       "Open the Expense Tracker app on the other device and scan this QR code to join the shared list.",

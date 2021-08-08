@@ -54,6 +54,7 @@ class _HomeState extends State<Home> {
         builder: (_) => SetupDialog()).then((value) {
       if (value == null || value == RESULT.CANCEL) {
         log('setup dialog cancelled.');
+        showSetupDialog(prefs);
       } else {
         log('new list created successfully: $value');
         prefs.setString(PREF_LIST_ID, value).then((listId) =>

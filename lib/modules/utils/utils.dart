@@ -133,3 +133,14 @@ Future<List<Person>> queryPersons(String listId) async {
    return [];
   }
 }
+
+Future<bool> isValidListId(String listId) async {
+  log('call: isValidListId');
+  try {
+    DocumentReference query = FirebaseFirestore.instance.collection('lists').doc(listId);
+     var list = await query.get();
+     return list.exists;
+  } catch (e) {
+   return false;
+  }
+}
