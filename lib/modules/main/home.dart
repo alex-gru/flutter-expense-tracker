@@ -39,8 +39,10 @@ class _HomeState extends State<Home> {
       var listId = prefs.getString(PREF_LIST_ID);
       if (listId == null) {
         log('no listId available yet!');
-        showDialog(context: context, builder: (_) => SetupDialog())
-            .then((value) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => SetupDialog()).then((value) {
           if (value == null || value == RESULT.CANCEL) {
             log('setup dialog cancelled.');
           } else {
@@ -132,8 +134,10 @@ class _HomeState extends State<Home> {
             prefs.remove(PREF_LIST_ID);
             AppStateWidget.of(context).setPersons([]);
             AppStateWidget.of(context).setExpenses([]);
-            showDialog(context: context, builder: (_) => SetupDialog())
-                .then((value) {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => SetupDialog()).then((value) {
               if (value == null || value == RESULT.CANCEL) {
                 log('setup dialog cancelled.');
               } else {

@@ -30,7 +30,10 @@ class _SetupDialogState extends State<SetupDialog> {
             visible: !_showNewListForm,
             child: Text(
               "Welcome!",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
             ),
           ),
           Visibility(
@@ -39,25 +42,33 @@ class _SetupDialogState extends State<SetupDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.add, color: Theme.of(context).accentColor),
+                Icon(Icons.add, color: Theme
+                    .of(context)
+                    .accentColor),
                 Text(
                   "Create new List",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6,
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,18,0,18),
+            padding: const EdgeInsets.fromLTRB(0, 18, 0, 18),
             child: Text(
               "Expense Tracker helps you track household expenses.",
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyText2,
             ),
           ),
           Visibility(
             visible: _showNewListForm,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,0,18),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
               child: Column(
                 children: [
                   Padding(
@@ -66,7 +77,10 @@ class _SetupDialogState extends State<SetupDialog> {
                   ),
                   Text(
                     "To get started, provide the names of the household members.",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .bodyText2,
                   ),
                 ],
               ),
@@ -77,7 +91,9 @@ class _SetupDialogState extends State<SetupDialog> {
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   shape: StadiumBorder(),
-                  side: BorderSide(width: 1, color: Theme.of(context).accentColor),
+                  side: BorderSide(width: 1, color: Theme
+                      .of(context)
+                      .accentColor),
                 ),
                 onPressed: () async {
                   log('Open QR Scanner...');
@@ -91,12 +107,17 @@ class _SetupDialogState extends State<SetupDialog> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.qr_code, color: Theme.of(context).accentColor),
+                    Icon(Icons.qr_code, color: Theme
+                        .of(context)
+                        .accentColor),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(4,0,0,0),
+                      padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
                       child: Text(
                         "Join existing list",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle1,
                       ),
                     ),
                   ],
@@ -107,7 +128,9 @@ class _SetupDialogState extends State<SetupDialog> {
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   shape: StadiumBorder(),
-                  side: BorderSide(width: 1, color: Theme.of(context).accentColor),
+                  side: BorderSide(width: 1, color: Theme
+                      .of(context)
+                      .accentColor),
                 ),
                 onPressed: () async {
                   setState(() {
@@ -117,12 +140,17 @@ class _SetupDialogState extends State<SetupDialog> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add, color: Theme.of(context).accentColor),
+                    Icon(Icons.add, color: Theme
+                        .of(context)
+                        .accentColor),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(4,0,0,0),
+                      padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
                       child: Text(
                         "Create new list",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle1,
                       ),
                     ),
                   ],
@@ -133,7 +161,7 @@ class _SetupDialogState extends State<SetupDialog> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8,8,8,8),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   child: TextField(
                     onChanged: (value) => setState(() => _person1 = value),
                     decoration: InputDecoration(
@@ -160,20 +188,33 @@ class _SetupDialogState extends State<SetupDialog> {
         Visibility(
           visible: _showNewListForm,
           child: TextButton(
-            onPressed: _person1 == null || _person2 == null || _person1!.trim().isEmpty || _person2!.trim().isEmpty
+            onPressed: () => {
+              setState(() {
+                _showNewListForm = false;
+              })
+            },
+            child: Text('Go back'),
+          ),
+        ),
+        Visibility(
+          visible: _showNewListForm,
+          child: TextButton(
+            onPressed: _person1 == null || _person2 == null ||
+                _person1!.trim().isEmpty || _person2!.trim().isEmpty
                 ? null
                 : () {
-                    FirebaseFirestore.instance
-                        .collection('lists')
-                        .add({
-                          'person1': _person1,
-                          'person2': _person2,
-                        })
-                        .then((value) => Navigator.pop(context, value.id))
-                        .catchError((e) => log(
-                        'Could not create new list in Firebase collection. $_person1, $_person2'));
-                  },
-            child: Text('Create List'),
+              FirebaseFirestore.instance
+                  .collection('lists')
+                  .add({
+                'person1': _person1,
+                'person2': _person2,
+              })
+                  .then((value) => Navigator.pop(context, value.id))
+                  .catchError((e) =>
+                  log(
+                      'Could not create new list in Firebase collection. $_person1, $_person2'));
+            },
+            child: Text('Create list'),
           ),
         ),
         // TextButton(
