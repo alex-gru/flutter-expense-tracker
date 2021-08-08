@@ -132,6 +132,7 @@ class _HomeState extends State<Home> {
           if (value == RESULT.LEAVE_LIST) {
             log('leave list now.');
             prefs.remove(PREF_LIST_ID);
+            prefs.remove(PREF_PERSON);
             AppStateWidget.of(context).setPersons([]);
             AppStateWidget.of(context).setExpenses([]);
             showDialog(
