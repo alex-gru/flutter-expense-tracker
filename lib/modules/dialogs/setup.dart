@@ -23,143 +23,140 @@ class _SetupDialogState extends State<SetupDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Visibility(
-            visible: !_showNewListForm,
-            child: Text(
-              "Welcome!",
-              style: Theme.of(context).textTheme.headline6,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Visibility(
+              visible: !_showNewListForm,
+              child: Text(
+                "Welcome!",
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
-          ),
-          Visibility(
-            visible: _showNewListForm,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add, color: Theme.of(context).accentColor),
-                Text(
-                  "Create new List",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 18, 0, 18),
-            child: Text(
-              "Expense Tracker helps you track household expenses.\n\nIf you want to join an existing list, simply scan the QR code from the other device. Otherwise, create a new one.",
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ),
-          Visibility(
-            visible: _showNewListForm,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-              child: Column(
+            Visibility(
+              visible: _showNewListForm,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Divider(),
-                  ),
+                  Icon(Icons.add, color: Theme.of(context).accentColor),
                   Text(
-                    "To get started, provide the names of the household members.",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    "Create new List",
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ],
               ),
             ),
-          ),
-          Visibility(
-            visible: !_showNewListForm,
-            child: Column(
-              children: [
-                OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      side: BorderSide(
-                          width: 1, color: Theme.of(context).accentColor),
-                    ),
-                    onPressed: () async {
-                      log('Open QR Scanner...');
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => QrScanner()),
-                      );
-                      log('QR code result: $result');
-                      Navigator.pop(context, result ?? RESULT.CANCEL);
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.qr_code,
-                            color: Theme.of(context).accentColor),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                          child: Text(
-                            "Join existing list",
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ),
-                      ],
-                    )),
-                OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      side: BorderSide(
-                          width: 1, color: Theme.of(context).accentColor),
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        _showNewListForm = true;
-                      });
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.add, color: Theme.of(context).accentColor),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                          child: Text(
-                            "Create new list",
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: _showNewListForm,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  child: TextField(
-                    onChanged: (value) => setState(() => _person1 = value),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'e.g. Mary',
-                    ),
-                  ),
+            Visibility(
+              visible: !_showNewListForm,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 18, 0, 18),
+                child: Text(
+                  "Expense Tracker helps you track household expenses.\n\nIf you want to join an existing list, simply scan the QR code from the other device. Otherwise, create a new one.",
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    onChanged: (value) => setState(() => _person2 = value),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'e.g. John',
+              ),
+            ),
+            Visibility(
+              visible: _showNewListForm,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  "To get started, provide the names of the household members.",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !_showNewListForm,
+              child: Column(
+                children: [
+                  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: StadiumBorder(),
+                        side: BorderSide(
+                            width: 1, color: Theme.of(context).accentColor),
+                      ),
+                      onPressed: () async {
+                        log('Open QR Scanner...');
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => QrScanner()),
+                        );
+                        log('QR code result: $result');
+                        Navigator.pop(context, result ?? RESULT.CANCEL);
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.qr_code,
+                              color: Theme.of(context).accentColor),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                            child: Text(
+                              "Join existing list",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
+                      )),
+                  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: StadiumBorder(),
+                        side: BorderSide(
+                            width: 1, color: Theme.of(context).accentColor),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _showNewListForm = true;
+                        });
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.add, color: Theme.of(context).accentColor),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                            child: Text(
+                              "Create new list",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: _showNewListForm,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    child: TextField(
+                      onChanged: (value) => setState(() => _person1 = value),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'e.g. Mary',
+                      ),
                     ),
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      onChanged: (value) => setState(() => _person2 = value),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'e.g. John',
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         Visibility(
