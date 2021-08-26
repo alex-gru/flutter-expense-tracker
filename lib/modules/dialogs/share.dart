@@ -17,6 +17,7 @@ class ShareDialog extends StatefulWidget {
 
 class _ShareDialogState extends State<ShareDialog> {
   final String? _listId;
+  int _leaveCounter = 0;
 
   _ShareDialogState(this._listId);
 
@@ -61,7 +62,6 @@ class _ShareDialogState extends State<ShareDialog> {
               ),
             ],
           ),
-          // Text(_listId),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,12,0,0),
             child: Column(
@@ -70,13 +70,19 @@ class _ShareDialogState extends State<ShareDialog> {
                 OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       shape: StadiumBorder(),
-                      side: BorderSide(width: 1, color: Theme.of(context).disabledColor),
+                      backgroundColor: _leaveCounter > 0 ? Colors.red : null,
                     ),
                     onPressed: () async {
-                      Navigator.pop(context, RESULT.LEAVE_LIST);
+                      if (_leaveCounter == 0) {
+                        setState(() {
+                          _leaveCounter++;
+                        });
+                      } else {
+                        Navigator.pop(context, RESULT.LEAVE_LIST);
+                      }
                     },
                     child: Text(
-                      "Leave list",
+                      _leaveCounter > 0 ? "Are you sure? Tap again to leave." : "Leave list",
                       style: Theme.of(context).textTheme.caption,
                     )),
               ],
