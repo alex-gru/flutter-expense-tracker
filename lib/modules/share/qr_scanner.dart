@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -39,30 +38,30 @@ class _QrScannerState extends State<QrScanner> {
         children: <Widget>[
           Expanded(
               flex: 4,
-              child: Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-                QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-                  child: Visibility(
-                      visible: _invalidQrProvided,
-                      child:
-                      Container(
-                          decoration: ShapeDecoration(
-                            color: Colors.red.shade900,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                                side: BorderSide.none
-                            )
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text("Invalid QR code provided. Try again."),
-                          ))),
-                ),
-              ])),
+              child: Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+                      child: Visibility(
+                          visible: _invalidQrProvided,
+                          child: Container(
+                              decoration: ShapeDecoration(
+                                  color: Colors.red.shade900,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                      side: BorderSide.none)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(
+                                    "Invalid QR code provided. Try again."),
+                              ))),
+                    ),
+                  ])),
           Expanded(
             flex: 1,
             child: Padding(
@@ -99,16 +98,20 @@ class _QrScannerState extends State<QrScanner> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      isValidListId(scanData.code).then((isValid) {
-        setState(() {
-          _invalidQrProvided = !isValid;
+    controller.scannedDataStream
+        .listen((scanData) {
+          controller.pauseCamera();
+          isValidListId(scanData.code).then((isValid) {
+            if (!isValid) {
+              setState(() {
+                _invalidQrProvided = !isValid;
+                controller.resumeCamera();
+              });
+            } else {
+              Navigator.maybePop(context, scanData.code);
+            }
+          });
         });
-        if (!_invalidQrProvided) {
-          Navigator.maybePop(context, scanData.code);
-        }
-      });
-    });
   }
 
   @override
