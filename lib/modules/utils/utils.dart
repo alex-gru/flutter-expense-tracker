@@ -97,21 +97,22 @@ Future<void> queryExpenses(String listId, List<Person> persons,
   }
   Query query = FirebaseFirestore.instance.collection('expenses');
   return query
-      .where('person', whereIn: persons.map((e) => e.person).toList())
       .where('listId', isEqualTo: listId)
       .orderBy('when', descending: true)
       .get()
       .then((querySnapshot) async {
     List<Expense> expenses = [];
     querySnapshot.docs.forEach((document) {
-      expenses.add(Expense(
+      var expense = Expense(
         document.id,
         document.get('listId'),
         document.get('person'),
         document.get('value'),
         document.get('when'),
         document.get('text'),
-      ));
+      );
+      log('expense: $expense');
+      expenses.add(expense);
     });
     List<Person> personsWithBalances = calcBalance(persons, expenses, context);
     AppStateWidget.of(context).setPersons(personsWithBalances);

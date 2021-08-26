@@ -57,6 +57,7 @@ class _HomeState extends State<Home> {
         showSetupDialog(prefs);
       } else {
         log('list created or joined successfully: $listId');
+        AppStateWidget.of(context).setListId(listId);
         prefs.setString(PREF_LIST_ID, listId).then((result) =>
             queryPersons(listId).then(
                 (persons) => queryExpenses(listId, persons, true, context)));
