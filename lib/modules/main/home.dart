@@ -93,22 +93,25 @@ class _HomeState extends State<Home> {
                       AppStateScope.of(context).persons, true, context))),
         ],
       ),
-      body: AnimatedOpacity(
-        opacity: _loading ? 0.8 : 1,
-        duration: Duration(milliseconds: 100),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: BalanceWidget(relativeBalanceBarHeight), flex: 28),
-              Expanded(
-                  child: ExpensesListWidget(
-                    () => queryExpenses(
-                        AppStateScope.of(context).persons, false, context),
-                  ),
-                  flex: 72),
-            ],
+      body: Visibility(
+        visible: AppStateScope.of(context).persons.isNotEmpty,
+        child: AnimatedOpacity(
+          opacity: _loading ? 0.8 : 1,
+          duration: Duration(milliseconds: 100),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: BalanceWidget(relativeBalanceBarHeight), flex: 28),
+                Expanded(
+                    child: ExpensesListWidget(
+                      () => queryExpenses(
+                          AppStateScope.of(context).persons, false, context),
+                    ),
+                    flex: 72),
+              ],
+            ),
           ),
         ),
       ),
