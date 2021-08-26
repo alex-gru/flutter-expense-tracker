@@ -86,8 +86,8 @@ List<Person> calcBalance(
   ];
 }
 
-Future<void> queryExpenses(
-    List<Person> persons, bool animateFromCenter, BuildContext context) async {
+Future<void> queryExpenses(String listId, List<Person> persons,
+    bool animateFromCenter, BuildContext context) async {
   log('call: queryExpenses');
   // _loading = true;
   if (animateFromCenter) {
@@ -98,6 +98,7 @@ Future<void> queryExpenses(
   Query query = FirebaseFirestore.instance.collection('expenses');
   return query
       .where('person', whereIn: persons.map((e) => e.person).toList())
+      .where('listId', isEqualTo: listId)
       .orderBy('when', descending: true)
       .get()
       .then((querySnapshot) async {
@@ -105,6 +106,7 @@ Future<void> queryExpenses(
     querySnapshot.docs.forEach((document) {
       expenses.add(Expense(
         document.id,
+        document.get('listId'),
         document.get('person'),
         document.get('value'),
         document.get('when'),
@@ -122,25 +124,27 @@ Future<void> queryExpenses(
 Future<List<Person>> queryPersons(String listId) async {
   log('call: queryPersons');
   try {
-    DocumentReference query = FirebaseFirestore.instance.collection('lists').doc(listId);
+    DocumentReference query =
+        FirebaseFirestore.instance.collection('lists').doc(listId);
     return query.get().then((list) async {
-        List<Person> persons = [];
-        persons.add(Person.create(list.get('person1')));
-        persons.add(Person.create(list.get('person2')));
-        return persons;
-      });
+      List<Person> persons = [];
+      persons.add(Person.create(list.get('person1')));
+      persons.add(Person.create(list.get('person2')));
+      return persons;
+    });
   } catch (e) {
-   return [];
+    return [];
   }
 }
 
 Future<bool> isValidListId(String listId) async {
   log('call: isValidListId');
   try {
-    DocumentReference query = FirebaseFirestore.instance.collection('lists').doc(listId);
-     var list = await query.get();
-     return list.exists;
+    DocumentReference query =
+        FirebaseFirestore.instance.collection('lists').doc(listId);
+    var list = await query.get();
+    return list.exists;
   } catch (e) {
-   return false;
+    return false;
   }
 }

@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
         showSetupDialog(prefs);
       } else {
         queryPersons(listId)
-            .then((persons) => queryExpenses(persons, true, context));
+            .then((persons) => queryExpenses(listId, persons, true, context));
       }
     });
   }
@@ -51,15 +51,15 @@ class _HomeState extends State<Home> {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (_) => SetupDialog()).then((value) {
-      if (value == null || value == RESULT.CANCEL) {
+        builder: (_) => SetupDialog()).then((listId) {
+      if (listId == null || listId == RESULT.CANCEL) {
         log('setup dialog cancelled.');
         showSetupDialog(prefs);
       } else {
-        log('new list created successfully: $value');
-        prefs.setString(PREF_LIST_ID, value).then((listId) =>
-            queryPersons(value)
-                .then((persons) => queryExpenses(persons, true, context)));
+        log('list created or joined successfully: $listId');
+        prefs.setString(PREF_LIST_ID, listId).then((result) =>
+            queryPersons(listId).then(
+                (persons) => queryExpenses(listId, persons, true, context)));
       }
     });
   }
@@ -90,7 +90,10 @@ class _HomeState extends State<Home> {
               child: IconButton(
                   icon: Icon(Icons.refresh),
                   onPressed: () => queryExpenses(
-                      AppStateScope.of(context).persons, true, context))),
+                      AppStateScope.of(context).listId,
+                      AppStateScope.of(context).persons,
+                      true,
+                      context))),
         ],
       ),
       body: Visibility(
@@ -106,7 +109,7 @@ class _HomeState extends State<Home> {
                     child: BalanceWidget(relativeBalanceBarHeight), flex: 28),
                 Expanded(
                     child: ExpensesListWidget(
-                      () => queryExpenses(
+                      () => queryExpenses(AppStateScope.of(context).listId,
                           AppStateScope.of(context).persons, false, context),
                     ),
                     flex: 72),
@@ -120,7 +123,8 @@ class _HomeState extends State<Home> {
           showDialog(context: context, builder: (_) => AddDialog())
               .then((value) {
             if (value == RESULT.ADDED) {
-              queryExpenses(AppStateScope.of(context).persons, false, context);
+              queryExpenses(AppStateScope.of(context).listId,
+                  AppStateScope.of(context).persons, false, context);
             }
             return null;
           });
@@ -136,23 +140,26 @@ class _HomeState extends State<Home> {
       SharedPreferences.getInstance().then((prefs) {
         var listId = prefs.getString(PREF_LIST_ID);
         showDialog(context: context, builder: (_) => ShareDialog(listId))
-            .then((value) async {
-          if (value == RESULT.LEAVE_LIST) {
+            .then((result) async {
+          if (result == RESULT.LEAVE_LIST) {
             log('leave list now.');
             prefs.remove(PREF_LIST_ID);
             prefs.remove(PREF_PERSON);
+            AppStateWidget.of(context).setListId(null);
             AppStateWidget.of(context).setPersons([]);
             AppStateWidget.of(context).setExpenses([]);
             showSetupDialog(prefs);
-          } else if (value != null && value != RESULT.CANCEL) {
-            final persons = await queryPersons(value);
+          } else if (result != null && result != RESULT.CANCEL) {
+            String listId = result;
+            final persons = await queryPersons(listId);
             final msg;
             if (persons.isEmpty) {
               msg = 'Could not find a list for the provided code.';
             } else {
               msg = 'Successfully joined the list.';
-              prefs.setString(PREF_LIST_ID, value);
-              queryExpenses(persons, true, context);
+              prefs.setString(PREF_LIST_ID, listId);
+              AppStateWidget.of(context).setListId(listId);
+              queryExpenses(listId, persons, true, context);
             }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(msg),

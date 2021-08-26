@@ -4,16 +4,18 @@ import 'package:flutter_expense_tracker/modules/dto/person.dart';
 
 // Holds the shared state of the app
 class AppState {
-  AppState(this.persons, this.expenses);
+  AppState(this.listId, this.persons, this.expenses);
 
+  final String listId;
   final List<Person> persons;
   final List<Expense> expenses;
 
   AppState copyWith({
+    String? listId,
     List<Person>? persons,
     List<Expense>? expenses,
   }) {
-    return AppState(persons ?? this.persons, expenses ?? this.expenses);
+    return AppState(listId ?? this.listId, persons ?? this.persons, expenses ?? this.expenses);
   }
 }
 
@@ -47,7 +49,15 @@ class AppStateWidget extends StatefulWidget {
 }
 
 class AppStateWidgetState extends State<AppStateWidget> {
-  AppState _data = AppState([], []);
+  AppState _data = AppState('', [], []);
+
+  void setListId(String? listId) {
+    if (listId != _data.listId) {
+      setState(() {
+        _data = _data.copyWith(listId: listId);
+      });
+    }
+  }
 
   void setPersons(List<Person> persons) {
     if (persons != _data.persons) {

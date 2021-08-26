@@ -132,20 +132,22 @@ class _AddDialogState extends State<AddDialog> {
           onPressed: _amount == null || _text == null || _text!.isEmpty
               ? null
               : () {
-                  var _expense = Expense.create(
-                      _person!, _amount!, Timestamp.now(), _text!);
-                  FirebaseFirestore.instance
-                      .collection('expenses')
-                      .add({
-                        'person': _expense.person,
-                        'value': _expense.value,
-                        'when': _expense.when,
-                        'text': _expense.text
-                      })
-                      .then((value) => Navigator.pop(context, RESULT.ADDED))
-                      .catchError((e) => log(
-                          'Could not add new expense to Firebase collection. ${_expense.toString()}'));
-                },
+              var listId = AppStateScope.of(context).listId;
+              var _expense = Expense.create(listId,
+                  _person!, _amount!, Timestamp.now(), _text!);
+              FirebaseFirestore.instance
+                  .collection('expenses')
+                  .add({
+                'listId': listId,
+                'person': _expense.person,
+                'value': _expense.value,
+                'when': _expense.when,
+                'text': _expense.text
+              })
+                  .then((value) => Navigator.pop(context, RESULT.ADDED))
+                  .catchError((e) => log(
+                  'Could not add new expense to Firebase collection. ${_expense.toString()}'));
+            },
           child: Text('Add'),
         ),
         TextButton(
