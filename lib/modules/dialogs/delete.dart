@@ -56,6 +56,12 @@ class _DeleteDialogState extends State<DeleteDialog> {
       actions: [
         TextButton(
           onPressed: () {
+            Navigator.pop(context, RESULT.CANCEL);
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
             Navigator.pop(context, RESULT.DELETED);
             FirebaseFirestore.instance
                 .collection('expenses')
@@ -66,12 +72,6 @@ class _DeleteDialogState extends State<DeleteDialog> {
           },
           child: Text('Delete'),
         ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context, RESULT.CANCEL);
-          },
-          child: Text('Cancel'),
-        )
       ],
     );
   }

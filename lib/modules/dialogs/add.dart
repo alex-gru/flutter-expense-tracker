@@ -131,6 +131,12 @@ class _AddDialogState extends State<AddDialog> {
       ),
       actions: [
         TextButton(
+          onPressed: () {
+            Navigator.pop(context, RESULT.CANCEL);
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
           onPressed: _amount == null || _text == null || _text!.isEmpty
               ? null
               : () {
@@ -152,12 +158,6 @@ class _AddDialogState extends State<AddDialog> {
             },
           child: Text('Add'),
         ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context, RESULT.CANCEL);
-          },
-          child: Text('Cancel'),
-        )
       ],
     );
   }
