@@ -41,6 +41,7 @@ class _HomeState extends State<Home> {
         log('no listId available yet!');
         showSetupDialog(prefs);
       } else {
+        AppStateWidget.of(context).setListId(listId);
         queryPersons(listId)
             .then((persons) => queryExpenses(listId, persons, true, context));
       }
