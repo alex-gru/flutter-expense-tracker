@@ -192,12 +192,6 @@ class _SetupDialogState extends State<SetupDialog> {
             child: Text('Create list'),
           ),
         ),
-        // TextButton(
-        //   onPressed: () {
-        //     Navigator.pop(context, RESULT.CANCEL);
-        //   },
-        //   child: Text('Cancel'),
-        // )
       ],
     );
   }
